@@ -20,6 +20,14 @@ void main() {
     // Match whether the 2 addresses are equal or not
     decodedAddress.isEqual(expectedAddress);
   });
+
+  test('address printing', () {
+    final List<int> bytes = [1, 2, 3, 4, 5];
+    final int prefix = 42;
+    final Address address =
+        Address(prefix: prefix, bytes: Uint8List.fromList(bytes));
+    address.toString().isEqual('prefix: $prefix, bytes: $bytes');
+  });
   group('address decoding-encoding -> ', () {
     /// kusama
     decodeTest('EXtQYFeY2ivDsfazZvGC9aG87DxnhWH2f9kjUUq2pXTZKF5', 2);
@@ -59,32 +67,43 @@ void main() {
   // Decode Exception testing
   group('decode: throw exception -> ', () {
     test('data.length < 3 ', () {
-      expect(() => SS58Codec.decode('KS'), throwsException);
+      final String address = 'KS';
+      expect(() => SS58Codec.decode(address),
+          throwsA(isA<BadAddressLengthException>()));
+
+      String error = '';
+
+      try {
+        SS58Codec.decode(address);
+      } catch (e) {
+        error = e.toString();
+      }
+      expect(error, equals('Bad Length Address: $address.'));
     });
 
     test('data[0] > 128 ', () {
       expect(
           () =>
               SS58Codec.decode('fRWKeM1KzddF4G6N6isvg6SpFVWJLLXRyYvK1dXLx4xjP'),
-          throwsException);
+          throwsA(isA<InvalidPrefixException>()));
     });
     test('(data.length - offset) != any of [2, 3, 5, 9, 34, 35]', () {
       expect(
           () => SS58Codec.decode(
               '3HX1zEyzCbxeXe34JY8SNSVAZ6djFccsV5f67PTied4CcWHspQ'),
-          throwsException);
+          throwsA(isA<BadAddressLengthException>()));
       expect(
           () => SS58Codec.decode(
               '4pa95kBXvMqgbpDXkFVHE9JfnNqamjYQYtmSTZGcnBXwvnmosP'),
-          throwsException);
+          throwsA(isA<BadAddressLengthException>()));
       expect(
           () => SS58Codec.decode(
               '3rr8zEMfiR2AjQYpVvncJCAcRP7CLzfxMGuUU2Pw2MCotrsQnS'),
-          throwsException);
+          throwsA(isA<BadAddressLengthException>()));
       expect(
           () => SS58Codec.decode(
               '4uqUGom7PszVSaZipgHYwVNsMESj1W6cmMZYeXGFeeXGX6VEqm'),
-          throwsException);
+          throwsA(isA<BadAddressLengthException>()));
     });
   });
 
@@ -107,6 +126,15 @@ void main() {
         expect(
             () => SS58Codec.encode(Address(prefix: 0, bytes: Uint8List(len))),
             throwsA(isA<BadAddressLengthException>()));
+
+        String error = '';
+        try {
+          SS58Codec.encode(Address(prefix: 0, bytes: Uint8List(len)));
+          // ignore: no_leading_underscores_for_local_identifiers
+        } catch (e) {
+          error = e.toString();
+        }
+        expect(error, equals('Bad Length Address.'));
       }
     });
 
