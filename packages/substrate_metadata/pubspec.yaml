@@ -28,5 +28,6 @@ dependencies:
   weak_map: ^2.1.0 # BSD-2-Clause
 
 dev_dependencies:
+  path: ^1.8.2 # BSD-3-Clause
   lints: ^2.0.0
   test: ^1.16.0
