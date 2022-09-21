@@ -4,22 +4,9 @@ import '../types.dart';
 import '../utils/utils.dart';
 import 'package:utility/utility.dart';
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'type_exp.dart' as type_exp;
 import 'types.dart' as old;
 import './type_exp.dart' as texp;
-
-class TypeAlias implements scale.Type {
-  @override
-  // this donotcontruct have no effect here
-  scale.TypeKind get kind => scale.TypeKind.DoNotConstruct;
-  int alias;
-  String name;
-
-  TypeAlias({required this.alias, required this.name});
-
-  List<String>? docs;
-
-  List<String>? path;
-}
 
 typedef TypeCallback = Type Function();
 
@@ -90,7 +77,7 @@ class OldTypeRegistry {
     }
 
     // No Worries here as toString() is implemented in type_exp.dart at line [12]
-    var key = type.toString();
+    var key = type_exp.getString(type);
     var ti = _lookup[key];
     if (ti == null) {
       _types.add(DoNotConstructType());

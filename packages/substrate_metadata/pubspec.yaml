@@ -14,6 +14,7 @@ dependencies:
   cached: ^1.2.2 # MIT
   cached_annotation: ^1.2.0 # MIT
   cryptography: ^2.0.5 # Apache-2.0
+  equatable: ^2.0.5 # MIT
   json_schema2: ^2.0.2+9 # MIT
   
   # TODO: Remove this when polkadart_scale_codec is published

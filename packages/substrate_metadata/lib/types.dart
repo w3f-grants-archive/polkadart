@@ -130,11 +130,6 @@ class TupleType extends scale.TupleType with Type {
 
   @override
   scale.TypeKind get kind => scale.TypeKind.Tuple;
-
-  @override
-  String toString() {
-    return 'returning our trouble making tuple';
-  }
 }
 
 class OptionType extends scale.OptionType with Type {

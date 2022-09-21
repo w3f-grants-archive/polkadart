@@ -3,38 +3,9 @@ import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
 
 abstract class OldTypeDefinition {}
 
-class OldTypesAlias extends MapMixin<String, Map<String, String>> {
-  final Map<String, Map<String, String>> data;
-
-  OldTypesAlias(this.data);
-
-  @override
-  Map<String, String>? operator [](Object? key) {
-    return data[key];
-  }
-
-  @override
-  void operator []=(String key, Map<String, String> value) {
-    data[key] = value;
-  }
-
-  @override
-  void clear() {
-    data.clear();
-  }
-
-  @override
-  Iterable<String> get keys => data.keys;
-
-  @override
-  Map<String, String>? remove(Object? key) {
-    return data.remove(key);
-  }
-}
-
 class OldTypes {
   Map<String, dynamic>? types;
-  OldTypesAlias? typesAlias;
+  Map<String, Map<String, String>>? typesAlias;
   Map<String, String>? signedExtensions;
 
   OldTypes({this.types, this.typesAlias, this.signedExtensions});
@@ -42,7 +13,7 @@ class OldTypes {
   static OldTypes fromMap(Map<String, dynamic> map) {
     return OldTypes(
         types: map['types'],
-        typesAlias: OldTypesAlias(map['typesAlias']),
+        typesAlias: map['typesAlias'],
         signedExtensions: map['signedExtensions']);
   }
 }
@@ -55,8 +26,8 @@ class SpecVersionRange extends ListMixin<int?> {
 
   SpecVersionRange(List<int?> value) {
     scale.assertionCheck(value.length == 2);
-    _data[0] = value[0];
-    _data[1] = value[1];
+    this[0] = value[0];
+    this[1] = value[1];
   }
 
   @override
@@ -83,8 +54,7 @@ class OldTypesWithSpecVersionRange extends OldTypes {
     return OldTypesWithSpecVersionRange(
         minmax: SpecVersionRange((map['minmax'] as List).cast<int?>()),
         types: map['types'],
-        typesAlias:
-            map['typesAlias'] == null ? null : OldTypesAlias(map['typesAlias']),
+        typesAlias: map['typesAlias'],
         signedExtensions: map['signedExtensions']);
   }
 }
@@ -97,15 +67,14 @@ class OldTypesBundle extends OldTypes {
 
   static OldTypesBundle fromMap(Map<String, dynamic> map) {
     var obj = OldTypesBundle(
-        types: map['types'], signedExtensions: map['signedExtensions']);
+        types: map['types'],
+        typesAlias: map['typesAlias'],
+        signedExtensions: map['signedExtensions']);
 
     if (map['versions'] != null) {
       obj.versions = (map['versions'] as List)
           .map((value) => OldTypesWithSpecVersionRange.fromMap(value))
           .toList();
-    }
-    if (map['typesAlias'] != null) {
-      obj.typesAlias = OldTypesAlias(map['typesAlias']);
     }
 
     return obj;

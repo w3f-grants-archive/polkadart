@@ -1,50 +1,74 @@
+// ignore_for_file: unnecessary_overrides
+
+import 'package:equatable/equatable.dart';
 import '../../utils/common_utils.dart';
 
-abstract class Type {
+abstract class Type extends Equatable {
   final String kind;
   const Type({required this.kind});
 
   @override
   String toString() {
-    return _toString(this);
+    return getString(this);
   }
 
-  String _toString(Type type) {
-    switch (type.kind) {
-      case 'array':
-        return '[${_toString((type as ArrayType).item)}; ${type.len}]';
-      case 'tuple':
-        return '(${(type as TupleType).params.map((t) => _toString(t)).join(', ')})';
-      case 'named':
-        if ((type as NamedType).params.isEmpty) {
-          return type.name;
-        } else {
-          return '${type.name}<${type.params.map((t) => t is int ? t.toString() : _toString(t as Type)).join(', ')}>';
-        }
-    }
-    return '';
-  }
+  @override
+  List<Object?> get props => [kind];
 }
 
-class NamedType extends Type {
+String getString(Type type) {
+  switch (type.kind) {
+    case 'array':
+      return '[${getString((type as ArrayType).item)}; ${type.len}]';
+    case 'tuple':
+      return '(${(type as TupleType).params.map((t) => getString(t)).join(', ')})';
+    case 'named':
+      if ((type as NamedType).params.isEmpty) {
+        return type.name;
+      } else {
+        return '${type.name}<${type.params.map((t) => t is int ? t.toString() : getString(t as Type)).join(', ')}>';
+      }
+  }
+  return '';
+}
+
+class NamedType extends Type with EquatableMixin {
   final String name;
 
   /// list items can be of type -> `Type` or `int`
   final List<dynamic> params;
   const NamedType({required this.name, required this.params})
       : super(kind: 'named');
+
+  @override
+  List<Object?> get props => [name, params, 'named'];
+
+  @override
+  String toString() => getString(this);
 }
 
-class ArrayType extends Type {
+class ArrayType extends Type with EquatableMixin {
   final Type item;
   final int len;
   const ArrayType({required this.item, required this.len})
       : super(kind: 'array');
+
+  @override
+  List<Object?> get props => [item, len, 'array'];
+
+  @override
+  String toString() => getString(this);
 }
 
-class TupleType extends Type {
+class TupleType extends Type with EquatableMixin {
   final List<Type> params;
   const TupleType({required this.params}) : super(kind: 'tuple');
+
+  @override
+  List<Object?> get props => [params, 'tuple'];
+
+  @override
+  String toString() => getString(this);
 }
 
 Type parse(String typeExp) {
@@ -168,7 +192,7 @@ class TypeExpParser {
       }
       name = nameTok;
     }
-    while (isNotEmpty(_tok('::')) && isNotEmpty(item = _name()!)) {}
+    while (isNotEmpty(_tok('::')) && isNotEmpty(item = _name())) {}
     if (name == 'InherentOfflineReport' &&
         name == trait &&
         item == 'Inherent') {

@@ -1,5 +1,3 @@
-import '../types.dart';
-
 const ormlTypes = <String, dynamic>{
   'CallOf': 'Call',
   'DispatchTime': {
@@ -74,11 +72,9 @@ const ormlTypes = <String, dynamic>{
   'VestingScheduleOf': 'OrmlVestingSchedule'
 };
 
-final ormlAlias = OldTypesAlias(
-  <String, Map<String, String>>{
-    'tokens': {
-      'AccountData': 'OrmlAccountData',
-      'BalanceLock': 'OrmlBalanceLock'
-    },
+final ormlAlias = <String, Map<String, String>>{
+  'tokens': {
+    'AccountData': 'OrmlAccountData',
+    'BalanceLock': 'OrmlBalanceLock'
   },
-);
+};

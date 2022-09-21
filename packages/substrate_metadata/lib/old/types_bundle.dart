@@ -5,24 +5,24 @@ import 'types.dart';
 
 OldTypes getTypesFromBundle(OldTypesBundle bundle, int specVersion) {
   var types = OldTypes(
-      types: <String, dynamic>{
-        /// TODO: check `metadata_definitions.types.types` whether it is unwrapping every child element
-        /// or only types variable
-        ...(metadata_definitions.types.types ?? <String, dynamic>{}),
-        ...(substrateBundle.types ?? <String, dynamic>{}),
-        ...(bundle.types ?? <String, dynamic>{})
-      },
-      typesAlias: OldTypesAlias(
-        <String, Map<String, String>>{
-          ...(substrateBundle.typesAlias?.data ??
-              <String, Map<String, String>>{}),
-          ...(bundle.typesAlias ?? <String, Map<String, String>>{})
-        },
-      ),
-      signedExtensions: <String, String>{
-        ...(substrateBundle.signedExtensions ?? <String, dynamic>{}),
-        ...(bundle.signedExtensions ?? <String, dynamic>{})
-      });
+    types: <String, dynamic>{
+      /// TODO: check `metadata_definitions.types.types` whether it is unwrapping every child element
+      /// or only types variable
+      if (metadata_definitions.types.types != null)
+        ...metadata_definitions.types.types!,
+      if (substrateBundle.types != null) ...substrateBundle.types!,
+      if (bundle.types != null) ...bundle.types!,
+    },
+    typesAlias: <String, Map<String, String>>{
+      if (substrateBundle.typesAlias != null) ...substrateBundle.typesAlias!,
+      if (bundle.typesAlias != null) ...bundle.typesAlias!,
+    },
+    signedExtensions: <String, String>{
+      if (substrateBundle.signedExtensions != null)
+        ...substrateBundle.signedExtensions!,
+      if (bundle.signedExtensions != null) ...bundle.signedExtensions!,
+    },
+  );
 
   if (!isNotEmpty(bundle.versions?.length)) {
     return types;
@@ -36,9 +36,9 @@ OldTypes getTypesFromBundle(OldTypesBundle bundle, int specVersion) {
         types.types!.addAll(override.types!);
       }
 
-      types.typesAlias ??= OldTypesAlias(<String, Map<String, String>>{});
-      if (override.typesAlias?.data != null) {
-        types.typesAlias!.addAll(override.typesAlias!.data);
+      types.typesAlias ??= <String, Map<String, String>>{};
+      if (override.typesAlias != null) {
+        types.typesAlias!.addAll(override.typesAlias!);
       }
 
       types.signedExtensions ??= <String, String>{};

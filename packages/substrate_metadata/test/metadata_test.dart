@@ -151,7 +151,7 @@ void main() {
     obj.testEventsScaleEncodingDecoding();
   });
 
-  /// TODO: Resolve Conflicts of this package at
+  /// TODO: Resolve Conflicts of this chain: `subsocial` at
   ///
   /// description.specversion: `1`,
   /// pallet: `Scores`
