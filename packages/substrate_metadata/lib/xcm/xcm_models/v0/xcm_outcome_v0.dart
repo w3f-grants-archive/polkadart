@@ -1,7 +1,5 @@
 part of xcm_models;
 
-//export type XcmOutcomeV0 = XcmOutcomeV0_Complete | XcmOutcomeV0_Incomplete | XcmOutcomeV0_Error
-
 abstract class XcmOutcomeV0 {
   final String kind;
   const XcmOutcomeV0(this.kind);
