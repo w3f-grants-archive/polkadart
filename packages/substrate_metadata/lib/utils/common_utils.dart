@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
+
 bool isNotEmpty(dynamic value) {
   if (value == null) {
     return false;
@@ -14,4 +18,28 @@ bool isNotEmpty(dynamic value) {
     return value.isNotEmpty;
   }
   throw Exception('Unknown Type Exception');
+}
+
+void assertionCheck(bool condition, [String? msg]) {
+  if (!condition) {
+    throw AssertionError(msg ?? 'Assertion Error occured.');
+  }
+}
+
+List<String> readLines(String filePath) {
+  return File(filePath).readAsLinesSync();
+}
+
+BigInt parseBigInt(dynamic bigInt) {
+  if (bigInt is num) {
+    return BigInt.from(bigInt);
+  } else if (bigInt is String) {
+    if (bigInt.endsWith('n') && bigInt.length > 1) {
+      ///
+      /// checked if bigint has a number appended with 'n' or not
+      return BigInt.parse(bigInt.substring(0, bigInt.length - 1));
+    }
+    return BigInt.parse(bigInt);
+  }
+  throw UnexpectedTypeException();
 }

@@ -18,6 +18,7 @@ linter:
     constant_identifier_names: false
     overridden_fields: false
     non_constant_identifier_names: false
+    camel_case_types: false
 
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints

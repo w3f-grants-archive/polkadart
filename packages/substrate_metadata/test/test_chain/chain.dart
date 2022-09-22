@@ -1,5 +1,3 @@
-//ignore_for_file: unused_element
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as path;
@@ -13,7 +11,7 @@ import 'package:substrate_metadata/io.dart';
 import 'package:substrate_metadata/models/models.dart';
 import 'package:substrate_metadata/old/types_bundle.dart';
 import 'package:substrate_metadata/schema/spec_version.model.dart';
-import 'package:substrate_metadata/utils/lines.dart';
+import 'package:substrate_metadata/utils/common_utils.dart';
 import 'package:substrate_metadata/utils/spec_version_maker.dart';
 import 'package:test/test.dart';
 
