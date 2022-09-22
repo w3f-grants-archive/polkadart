@@ -46,7 +46,7 @@ class XcmOutcomeV0_Incomplete extends XcmOutcomeV0 {
     if (list is List && list.isNotEmpty) {
       value.add(parseBigInt(list[0]));
       if (list.length == 2) {
-        value.add(XcmV0.fromMap(list[0]));
+        value.add(XcmErrorV0.fromMap(list[1]));
       }
     }
 

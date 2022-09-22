@@ -133,7 +133,7 @@ class XcmErrorV0_CannotReachDestination extends XcmErrorV0 {
     if (list is List && list.isNotEmpty) {
       value.add(MultiLocationV0.fromMap(list[0]));
       if (list.length == 2) {
-        value.add(XcmV0.fromMap(list[0]));
+        value.add(XcmV0.fromMap(list[1]));
       }
     }
 
