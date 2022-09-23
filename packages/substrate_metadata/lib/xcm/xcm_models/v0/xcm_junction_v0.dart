@@ -27,7 +27,7 @@ abstract class XcmJunctionV0 {
       case 'Plurality':
         return XcmJunctionV0_Plurality.fromMap(map);
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

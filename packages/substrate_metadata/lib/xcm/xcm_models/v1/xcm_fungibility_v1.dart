@@ -11,7 +11,7 @@ abstract class XcmFungibilityV1 {
       case 'NonFungible':
         return XcmFungibilityV1_NonFungible.fromMap(map);
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

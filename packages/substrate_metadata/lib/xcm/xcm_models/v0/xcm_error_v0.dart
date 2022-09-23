@@ -63,7 +63,7 @@ abstract class XcmErrorV0 {
       case 'RecursionLimitReached':
         return XcmErrorV0_RecursionLimitReached();
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }
@@ -132,7 +132,7 @@ class XcmErrorV0_CannotReachDestination extends XcmErrorV0 {
     var list = map['value'];
     if (list is List && list.isNotEmpty) {
       value.add(MultiLocationV0.fromMap(list[0]));
-      if (list.length == 2) {
+      if (list.length > 1) {
         value.add(XcmV0.fromMap(list[1]));
       }
     }

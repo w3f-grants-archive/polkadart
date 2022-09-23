@@ -24,7 +24,7 @@ abstract class XcmBodyIdV0 {
       case 'Judicial':
         return XcmBodyIdV0_Judicial();
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

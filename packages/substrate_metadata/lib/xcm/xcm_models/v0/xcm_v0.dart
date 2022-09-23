@@ -29,7 +29,7 @@ abstract class XcmV0 {
       case 'RelayedFrom':
         return XcmV0_RelayedFrom.fromMap(map);
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

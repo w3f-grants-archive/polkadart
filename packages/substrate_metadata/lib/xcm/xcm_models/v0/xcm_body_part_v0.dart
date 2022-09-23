@@ -18,7 +18,7 @@ abstract class XcmBodyPartV0 {
       case 'MoreThanProportion':
         return XcmBodyPartV0_MoreThanProportion.fromMap(map);
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

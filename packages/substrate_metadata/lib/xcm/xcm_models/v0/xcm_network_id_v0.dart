@@ -16,7 +16,7 @@ class XcmNetworkIdV0 {
       case 'Kusama':
         return XcmNetworkIdV0_Kusama();
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }

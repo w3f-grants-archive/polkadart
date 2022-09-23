@@ -32,7 +32,7 @@ abstract class XcmAssetInstanceV0 {
       case 'Blob':
         return XcmAssetInstanceV0_Blob.fromMap(map);
       default:
-        throw UnexpectedCaseException();
+        throw UnexpectedCaseException(map['__kind']);
     }
   }
 }
