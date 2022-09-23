@@ -2,7 +2,17 @@ library xcm_models;
 
 import 'dart:typed_data';
 import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
+import 'package:substrate_metadata/old/type_exp.dart';
+import 'package:substrate_metadata/old/types.dart';
 import 'package:substrate_metadata/utils/common_utils.dart';
+
+///
+/// versioned xcm models containing refs to designated versions
+part 'versioned_multi_asset.dart';
+part 'versioned_multi_assets.dart';
+part 'versioned_multi_location.dart';
+part 'versioned_response.dart';
+part 'versioned_xcm.dart';
 
 ///
 /// v0 xcm models
@@ -41,3 +51,6 @@ part 'v1/xcm_wild_multi_asset_v1.dart';
 ///
 /// v2 xcm models
 part 'v2/xcm_error_v2.dart';
+part 'v2/xcm_instruction_v2.dart';
+part 'v2/xcm_response_v2.dart';
+part 'v2/xcm_weight_limit_v2.dart';

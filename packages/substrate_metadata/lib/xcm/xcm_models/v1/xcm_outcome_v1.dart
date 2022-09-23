@@ -1,5 +1,5 @@
 part of xcm_models;
-/* 
+
 abstract class XcmOutcomeV1 {
   final String kind;
 
@@ -35,7 +35,7 @@ class XcmOutcomeV1_Incomplete extends XcmOutcomeV1 {
     assertionCheck(
         value.isEmpty || value[0] is BigInt, 'BigInt is allowed at index 0');
     assertionCheck(value.length != 2 || value[1] is XcmErrorV2,
-        'XcmErrorV2 is allowed at index 0');
+        'XcmErrorV2 is allowed at index 1');
   }
 
   static XcmOutcomeV1_Incomplete fromMap(Map<String, dynamic> map) {
@@ -58,4 +58,3 @@ class XcmOutcomeV1_Error extends XcmOutcomeV1 {
   static XcmOutcomeV1_Error fromMap(Map<String, dynamic> map) =>
       XcmOutcomeV1_Error(value: XcmErrorV2.fromMap(map['value']));
 }
- */

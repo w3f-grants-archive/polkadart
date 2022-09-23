@@ -35,7 +35,7 @@ class XcmOutcomeV0_Incomplete extends XcmOutcomeV0 {
     assertionCheck(
         value.isEmpty || value[0] is BigInt, 'BigInt is allowed at index 0');
     assertionCheck(value.length != 2 || value[1] is XcmErrorV0,
-        'XcmErrorV0 is allowed at index 0');
+        'XcmErrorV0 is allowed at index 1');
   }
 
   static XcmOutcomeV0_Incomplete fromMap(Map<String, dynamic> map) {

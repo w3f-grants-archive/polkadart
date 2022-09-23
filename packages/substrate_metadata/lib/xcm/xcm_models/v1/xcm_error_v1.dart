@@ -126,7 +126,7 @@ class XcmErrorV1_CannotReachDestination extends XcmErrorV1 {
     assertionCheck(value.isEmpty || value[0] is MultiLocationV1,
         'MultiLocationV1 is allowed at index 0');
     assertionCheck(
-        value.length != 2 || value[1] is XcmV1, 'XcmV1 is allowed at index 0');
+        value.length != 2 || value[1] is XcmV1, 'XcmV1 is allowed at index 1');
   }
 
   static XcmErrorV1_CannotReachDestination fromMap(Map<String, dynamic> map) {
