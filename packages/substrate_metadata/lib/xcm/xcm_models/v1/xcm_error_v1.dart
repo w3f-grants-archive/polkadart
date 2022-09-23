@@ -1,7 +1,5 @@
 part of xcm_models;
 
-//export type XcmErrorV1 = XcmErrorV1_Undefined | XcmErrorV1_Overflow | XcmErrorV1_Unimplemented | XcmErrorV1_UnhandledXcmVersion | XcmErrorV1_UnhandledXcmMessage | XcmErrorV1_UnhandledEffect | XcmErrorV1_EscalationOfPrivilege | XcmErrorV1_UntrustedReserveLocation | XcmErrorV1_UntrustedTeleportLocation | XcmErrorV1_DestinationBufferOverflow | XcmErrorV1_SendFailed | XcmErrorV1_CannotReachDestination | XcmErrorV1_MultiLocationFull | XcmErrorV1_FailedToDecode | XcmErrorV1_BadOrigin | XcmErrorV1_ExceedsMaxMessageSize | XcmErrorV1_FailedToTransactAsset | XcmErrorV1_WeightLimitReached | XcmErrorV1_Wildcard | XcmErrorV1_TooMuchWeightRequired | XcmErrorV1_NotHoldingFees | XcmErrorV1_WeightNotComputable | XcmErrorV1_Barrier | XcmErrorV1_NotWithdrawable | XcmErrorV1_LocationCannotHold | XcmErrorV1_TooExpensive | XcmErrorV1_AssetNotFound | XcmErrorV1_DestinationUnsupported | XcmErrorV1_RecursionLimitReached
-
 abstract class XcmErrorV1 {
   final String kind;
   const XcmErrorV1(this.kind);
@@ -126,9 +124,9 @@ class XcmErrorV1_CannotReachDestination extends XcmErrorV1 {
       : super('CannotReachDestination') {
     assertionCheck(value.length <= 2, 'Max length 2 is allowed');
     assertionCheck(value.isEmpty || value[0] is MultiLocationV1,
-        'MultiLocationV0 is allowed at index 0');
+        'MultiLocationV1 is allowed at index 0');
     assertionCheck(
-        value.length != 2 || value[1] is XcmV1, 'XcmV0 is allowed at index 0');
+        value.length != 2 || value[1] is XcmV1, 'XcmV1 is allowed at index 0');
   }
 
   static XcmErrorV1_CannotReachDestination fromMap(Map<String, dynamic> map) {

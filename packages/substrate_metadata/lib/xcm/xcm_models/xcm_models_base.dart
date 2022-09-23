@@ -37,3 +37,7 @@ part 'v1/xcm_response_v1.dart';
 part 'v1/xcm_v1.dart';
 part 'v1/xcm_wild_fungibility_v1.dart';
 part 'v1/xcm_wild_multi_asset_v1.dart';
+
+///
+/// v2 xcm models
+part 'v2/xcm_error_v2.dart';
