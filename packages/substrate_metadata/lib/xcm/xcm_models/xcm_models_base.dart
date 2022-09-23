@@ -2,8 +2,6 @@ library xcm_models;
 
 import 'dart:typed_data';
 import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
-import 'package:substrate_metadata/old/type_exp.dart';
-import 'package:substrate_metadata/old/types.dart';
 import 'package:substrate_metadata/utils/common_utils.dart';
 
 ///
