@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:substrate_metadata/old/type_registry.dart';
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
 import 'package:substrate_metadata/old/definitions/xcm/src.dart' as xcm_types;
-import 'package:substrate_metadata/xcm/xcm_models/xcm_models_base.dart';
+import 'package:substrate_metadata/old/type_registry.dart';
 
 final Map<String, dynamic> _map = _createCodec();
 
@@ -31,7 +30,7 @@ dynamic decodeXcm(dynamic bytes, {bool return_map = false}) {
             ? value.toInt()
             : throw UnsupportedError('Cannot convert to JSON: $value')));
   }
-  return VersionedXcm.fromMap(map);
+  return map;
 }
 
 Uint8List encodeXcm(dynamic msg) {

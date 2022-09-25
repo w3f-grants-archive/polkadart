@@ -28,3 +28,5 @@ part './storage/storage_entry_type.dart';
 part './raw_block_events.model.dart';
 part './version_description.model.dart';
 part './decoded_block_events.model.dart';
+part './decoded_block_extrinsics.model.dart';
+part './raw_block.model.dart';
