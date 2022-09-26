@@ -3,7 +3,6 @@ part of models;
 class VersionDescription extends SpecVersion {
   final ChainDescription description;
   final scale_codec.Codec codec;
-  final scale_codec.JsonCodec jsonCodec;
   final Registry events;
   final Registry calls;
 
@@ -13,7 +12,6 @@ class VersionDescription extends SpecVersion {
       /// local params
       required this.description,
       required this.codec,
-      required this.jsonCodec,
       required this.events,
       required this.calls,
 
