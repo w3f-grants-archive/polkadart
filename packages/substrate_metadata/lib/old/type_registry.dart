@@ -493,6 +493,8 @@ scale.Primitive? asPrimitive(String name) {
     case 'str':
     case 'text':
       return scale.Primitive.Str;
+    case 'char':
+      return scale.Primitive.Char;
     default:
       return null;
   }
