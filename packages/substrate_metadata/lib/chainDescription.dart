@@ -57,7 +57,7 @@ ChainDescription getChainDescriptionFromMetadata(
     case "V12":
     case "V13":
       scale.assertNotNull(oldTypes,
-          msg: 'Type definitions are required for metadata ${metadata.kind}');
+          'Type definitions are required for metadata ${metadata.kind}');
       return FromOld(metadata, oldTypes!).convert();
     case "V14":
       return FromV14((metadata as Metadata_V14).value).convert();
@@ -208,8 +208,7 @@ abstract class FromV14 implements _$FromV14 {
   StorageItem _getStorageItem(String prefix, String name) {
     var storage = _storage();
     var item = storage[prefix]?[name];
-    return scale.assertNotNull(item,
-        msg: 'Can\'t find $prefix.$name storage item');
+    return scale.assertNotNull(item, 'Can\'t find $prefix.$name storage item');
   }
 
   @Cached()
