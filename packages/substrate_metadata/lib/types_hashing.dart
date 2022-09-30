@@ -1,9 +1,11 @@
 import 'dart:math';
-import '../utils/common_utils.dart';
+
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
-import 'utils/utils.dart';
-import 'types.dart';
 import 'package:weak_map/weak_map.dart';
+
+import '../utils/common_utils.dart';
+import 'types.dart';
+import 'utils/utils.dart';
 
 // ignore: non_constant_identifier_names
 final HASHERS = WeakMap<List<Type>, TypeHasher>();
@@ -112,7 +114,7 @@ class TypeHasher {
       }
       // This is a previous traversal, or we already exited
       // the strongly connected component of a `node`.
-      scale.assertionCheck(node.component !=
+      scale.assertNotNull(node.component !=
           null); // In any case component information must be available.
       if (node.component != parent.component) {
         // We are entering the strongly connected component.
@@ -182,7 +184,7 @@ class TypeHasher {
             type.fields[0].name == null) {
           return _hashTuple(
               type.fields.map((f) {
-                scale.assertionCheck(f.name == null);
+                scale.assertNotNull(f.name == null);
                 return f.type;
               }).toList(),
               parent);

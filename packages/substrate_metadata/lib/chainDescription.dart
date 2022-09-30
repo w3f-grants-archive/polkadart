@@ -1,16 +1,17 @@
 // ignore_for_file: file_names, no_leading_underscores_for_local_identifiers
 
 import 'dart:typed_data';
+
+import 'package:cached_annotation/cached_annotation.dart';
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
 import 'package:substrate_metadata/utils/common_utils.dart';
 
 import './old/types.dart';
-import 'old/type_registry.dart';
-import 'utils/utils.dart';
-import 'types.dart';
 import 'models/models.dart';
-import 'package:cached_annotation/cached_annotation.dart';
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'old/type_registry.dart';
 import 'storage.dart';
+import 'types.dart';
+import 'utils/utils.dart';
 
 part 'chainDescription.cached.dart';
 
@@ -91,11 +92,11 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _digestItem() {
     var digest = _types()[_digest()];
-    scale.assertionCheck(digest.kind == scale.TypeKind.Composite);
+    scale.assertNotNull(digest.kind == scale.TypeKind.Composite);
     for (var field in (digest as CompositeType).fields) {
       if (field.name == 'logs') {
         var seq = _types()[field.type];
-        scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
+        scale.assertNotNull(seq.kind == scale.TypeKind.Sequence);
         return (seq as SequenceType).type;
       }
     }
@@ -105,7 +106,7 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _event() {
     var rec = _types()[_eventRecord()];
-    scale.assertionCheck(rec.kind == scale.TypeKind.Composite);
+    scale.assertNotNull(rec.kind == scale.TypeKind.Composite);
     Field? eventField;
     for (var f in (rec as CompositeType).fields) {
       if (f.name == 'event') {
@@ -113,7 +114,7 @@ abstract class FromV14 implements _$FromV14 {
         break;
       }
     }
-    scale.assertionCheck(eventField != null);
+    scale.assertNotNull(eventField != null);
     return eventField!.type;
   }
 
@@ -122,7 +123,7 @@ abstract class FromV14 implements _$FromV14 {
     var types = _types();
     var eventRecordList = _eventRecordList();
     var seq = types[eventRecordList];
-    scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
+    scale.assertNotNull(seq.kind == scale.TypeKind.Sequence);
     return (seq as SequenceType).type;
   }
 
@@ -236,8 +237,8 @@ abstract class FromV14 implements _$FromV14 {
               keys = [(e.type as StorageEntryTypeV14_Map).key];
             } else {
               var keyDef = _types()[(e.type as StorageEntryTypeV14_Map).key];
-              scale.assertionCheck(keyDef.kind == scale.TypeKind.Tuple);
-              scale.assertionCheck(
+              scale.assertNotNull(keyDef.kind == scale.TypeKind.Tuple);
+              scale.assertNotNull(
                   (keyDef as TupleType).tuple.length == hashers.length);
               keys = keyDef.tuple;
             }

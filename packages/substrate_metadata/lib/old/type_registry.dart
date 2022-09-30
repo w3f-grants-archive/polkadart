@@ -1,12 +1,13 @@
 // ignore_for_file: file_names
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'package:utility/utility.dart';
+
+import './type_exp.dart' as texp;
 import '../../utils/common_utils.dart';
 import '../types.dart';
 import '../utils/utils.dart';
-import 'package:utility/utility.dart';
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
 import 'type_exp.dart' as type_exp;
 import 'types.dart' as old;
-import './type_exp.dart' as texp;
 
 typedef TypeCallback = Type Function();
 
@@ -46,7 +47,7 @@ class OldTypeRegistry {
       if (a is Type || (a is Map && a['kind'] != -1)) {
         return a;
       }
-      scale.assertionCheck(a is Map);
+      scale.assertNotNull(a is Map);
       if (seen.contains(ti)) {
         throw Exception(
             'Cycle of non-constructable types involving ${a['name']}');
@@ -319,7 +320,7 @@ class OldTypeRegistry {
       case 256:
         return use('U$len');
       default:
-        scale.assertionCheck(len % 8 == 0, 'bit length must me aligned');
+        scale.assertNotNull(len % 8 == 0, 'bit length must me aligned');
         return use('[u8; ${len / 8}]');
     }
   }
@@ -344,7 +345,7 @@ class OldTypeRegistry {
         if (type is String) {
           fields.add(Field(type: use(type)));
         } else if (type != null) {
-          scale.assertionCheck(type is Map);
+          scale.assertNotNull(type is Map);
           for (var key in (type as Map).keys) {
             fields.add(Field(name: key, type: use(type[key])));
           }

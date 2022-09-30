@@ -1,8 +1,9 @@
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
+    show assertNotNull, TypeKind;
+
+import 'types.dart';
 import 'types_hashing.dart' show getTypeHash;
 import 'utils/utils.dart' show sha256;
-import 'types.dart';
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
-    show assertionCheck, TypeKind;
 
 class Definition extends Variant {
   final String pallet;
@@ -31,12 +32,12 @@ class Registry {
   Registry(List<Type> types, int ti) {
     _types = types;
     var pallets = types[ti];
-    assertionCheck(pallets.kind == TypeKind.Variant);
+    assertNotNull(pallets.kind == TypeKind.Variant);
 
     for (var pallet in (pallets as VariantType).variants) {
-      assertionCheck(pallet.fields.length == 1);
+      assertNotNull(pallet.fields.length == 1);
       var palletType = types[pallet.fields[0].type];
-      assertionCheck(palletType.kind == TypeKind.Variant);
+      assertNotNull(palletType.kind == TypeKind.Variant);
       for (var def in (palletType as VariantType).variants) {
         _definitions['${pallet.name}.${def.name}'] = Definition(
           fields: def.fields,

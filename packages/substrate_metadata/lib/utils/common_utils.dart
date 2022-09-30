@@ -20,7 +20,7 @@ bool isNotEmpty(dynamic value) {
   throw Exception('Unknown Type Exception');
 }
 
-void assertionCheck(bool condition, [String? msg]) {
+void assertNotNull(bool condition, [String? msg]) {
   if (!condition) {
     throw AssertionError(msg ?? 'Assertion Error occured.');
   }
