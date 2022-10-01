@@ -56,7 +56,7 @@ ChainDescription getChainDescriptionFromMetadata(
     case "V11":
     case "V12":
     case "V13":
-      scale.assertNotNull(oldTypes,
+      assertNotNull(oldTypes,
           'Type definitions are required for metadata ${metadata.kind}');
       return FromOld(metadata, oldTypes!).convert();
     case "V14":
@@ -92,11 +92,11 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _digestItem() {
     var digest = _types()[_digest()];
-    scale.assertNotNull(digest.kind == scale.TypeKind.Composite);
+    scale.assertionCheck(digest.kind == scale.TypeKind.Composite);
     for (var field in (digest as CompositeType).fields) {
       if (field.name == 'logs') {
         var seq = _types()[field.type];
-        scale.assertNotNull(seq.kind == scale.TypeKind.Sequence);
+        scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
         return (seq as SequenceType).type;
       }
     }
@@ -106,7 +106,7 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _event() {
     var rec = _types()[_eventRecord()];
-    scale.assertNotNull(rec.kind == scale.TypeKind.Composite);
+    scale.assertionCheck(rec.kind == scale.TypeKind.Composite);
     Field? eventField;
     for (var f in (rec as CompositeType).fields) {
       if (f.name == 'event') {
@@ -114,7 +114,7 @@ abstract class FromV14 implements _$FromV14 {
         break;
       }
     }
-    scale.assertNotNull(eventField != null);
+    scale.assertionCheck(eventField != null);
     return eventField!.type;
   }
 
@@ -123,7 +123,7 @@ abstract class FromV14 implements _$FromV14 {
     var types = _types();
     var eventRecordList = _eventRecordList();
     var seq = types[eventRecordList];
-    scale.assertNotNull(seq.kind == scale.TypeKind.Sequence);
+    scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
     return (seq as SequenceType).type;
   }
 
@@ -142,7 +142,7 @@ abstract class FromV14 implements _$FromV14 {
           .map((ext) {
             return Field(name: ext.identifier, type: ext.type!);
           })
-          .where((f) => !isUnitType(scale.getUnwrappedType(types, f.type)))
+          .where((f) => !isUnitType(types.getUnwrappedType(f.type)))
           .toList(),
     );
 
@@ -202,13 +202,13 @@ abstract class FromV14 implements _$FromV14 {
       throw Exception(
           'Type $name should have at least ${idx + 1} type parameter${idx > 0 ? 's' : ''}');
     }
-    return scale.assertNotNull(def.type.params[idx].type);
+    return assertNotNull(def.type.params[idx].type);
   }
 
   StorageItem _getStorageItem(String prefix, String name) {
     var storage = _storage();
     var item = storage[prefix]?[name];
-    return scale.assertNotNull(item, 'Can\'t find $prefix.$name storage item');
+    return assertNotNull(item, 'Can\'t find $prefix.$name storage item');
   }
 
   @Cached()
@@ -236,8 +236,8 @@ abstract class FromV14 implements _$FromV14 {
               keys = [(e.type as StorageEntryTypeV14_Map).key];
             } else {
               var keyDef = _types()[(e.type as StorageEntryTypeV14_Map).key];
-              scale.assertNotNull(keyDef.kind == scale.TypeKind.Tuple);
-              scale.assertNotNull(
+              scale.assertionCheck(keyDef.kind == scale.TypeKind.Tuple);
+              scale.assertionCheck(
                   (keyDef as TupleType).tuple.length == hashers.length);
               keys = keyDef.tuple;
             }

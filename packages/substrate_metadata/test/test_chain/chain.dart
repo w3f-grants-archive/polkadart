@@ -2,8 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:path/path.dart' as path;
+
 import 'package:cached_annotation/cached_annotation.dart';
+import 'package:path/path.dart' as path;
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
 import 'package:substrate_metadata/chainDescription.dart';
@@ -204,13 +205,12 @@ abstract class Chain implements _$Chain {
     }
     VersionDescription? e;
 
-    /// TODO: Confirm the condition of next != 0
     if (description.isNotEmpty && next != 0 && next < description.length) {
       e = next < 0
           ? description[description.length - 1]
           : description[next - 1];
     }
-    scale_codec.assertNotNull(e, 'not found metadata for block $blockNumber');
+    assertNotNull(e, 'not found metadata for block $blockNumber');
     return e!;
   }
 

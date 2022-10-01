@@ -20,8 +20,21 @@ bool isNotEmpty(dynamic value) {
   throw Exception('Unknown Type Exception');
 }
 
-void assertNotNull(bool condition, [String? msg]) {
-  if (!condition) {
+/// Asserts if the `T` value is null or not.
+///
+/// Returns `T` if not null otherwise throws `AssertionException`
+T assertNotNull<T>(T? val, [String? msg]) {
+  if (val == null) {
+    throw AssertionError(msg ?? 'Assertion Error occured.');
+  }
+  return val;
+}
+
+/// Asserts if the [val] value is true or not
+///
+/// Throws `AssertionException` if `false`
+void assertionCheck(bool val, [String? msg]) {
+  if (!val) {
     throw AssertionError(msg ?? 'Assertion Error occured.');
   }
 }

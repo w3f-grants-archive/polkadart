@@ -114,7 +114,7 @@ class TypeHasher {
       }
       // This is a previous traversal, or we already exited
       // the strongly connected component of a `node`.
-      scale.assertNotNull(node.component !=
+      scale.assertionCheck(node.component !=
           null); // In any case component information must be available.
       if (node.component != parent.component) {
         // We are entering the strongly connected component.
@@ -184,14 +184,14 @@ class TypeHasher {
             type.fields[0].name == null) {
           return _hashTuple(
               type.fields.map((f) {
-                scale.assertNotNull(f.name == null);
+                scale.assertionCheck(f.name == null);
                 return f.type;
               }).toList(),
               parent);
         } else {
           var struct = <String, dynamic>{};
           for (var f in type.fields) {
-            var name = scale.assertNotNull(f.name);
+            var name = assertNotNull(f.name);
             struct[name] = _hash(f.type, parent);
           }
           return {struct};

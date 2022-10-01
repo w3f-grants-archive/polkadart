@@ -88,7 +88,7 @@ List<Type> removeUnitFieldsFromStructs(List<Type> types) {
             return type;
           }
           var fields = type.fields.where((f) {
-            var fieldType = scale.getUnwrappedType(types, f.type);
+            var fieldType = types.getUnwrappedType(f.type);
             return !isUnitType(fieldType);
           }).toList();
           if (fields.length == type.fields.length) {
@@ -108,7 +108,7 @@ List<Type> removeUnitFieldsFromStructs(List<Type> types) {
               return v;
             }
             var fields = v.fields.where((Field f) {
-              var fieldType = scale.getUnwrappedType(types, f.type);
+              var fieldType = types.getUnwrappedType(f.type);
               return !isUnitType(fieldType);
             }).toList();
 
@@ -152,8 +152,7 @@ bool isUnitType(scale.Type type) {
 List<Type> replaceUnitOptionWithBoolean(List<Type> types) {
   return types.map((Type type) {
     if (type.kind == scale.TypeKind.Option &&
-        isUnitType(
-            scale.getUnwrappedType(types, (type as OptionType).type) as Type)) {
+        isUnitType(types.getUnwrappedType((type as OptionType).type) as Type)) {
       return PrimitiveType(
         primitive: scale.Primitive.Bool,
         path: type.path,

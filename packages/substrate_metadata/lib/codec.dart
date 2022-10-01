@@ -5,7 +5,7 @@ import './old/type_registry.dart' as type_registry;
 import 'models/models.dart' as model;
 
 model.Metadata decodeMetadata(dynamic data) {
-  scale.assertNotNull(data is String || data is Uint8List);
+  scale.assertionCheck(data is String || data is Uint8List);
   late Uint8List content;
   if (data is String) {
     content = scale.decodeHex(data);
@@ -15,11 +15,12 @@ model.Metadata decodeMetadata(dynamic data) {
   var src = scale.Src(content);
 
   var magic = src.u32();
-  scale.assertNotNull(
+  scale.assertionCheck(
       magic == 0x6174656d, 'No magic number 0x6174656d at the start of data');
 
   var version = src.u8();
-  scale.assertNotNull(9 <= version && version < 15, 'Invalid metadata version');
+  scale.assertionCheck(
+      9 <= version && version < 15, 'Invalid metadata version');
 
   // See https://github.com/polkadot-js/api/commit/a9211690be6b68ad6c6dad7852f1665cadcfa5b2
   // for why try-catch and version decoding stuff is here

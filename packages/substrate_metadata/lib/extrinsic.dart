@@ -1,9 +1,7 @@
 import 'dart:typed_data';
-
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
 import 'package:substrate_metadata/utils/common_utils.dart';
-
 import 'chainDescription.dart';
 
 dynamic decodeExtrinsic(dynamic rawExtrinsic, ChainDescription chainDescription,
@@ -23,7 +21,7 @@ dynamic decodeExtrinsic(dynamic rawExtrinsic, ChainDescription chainDescription,
   /// 0b01111111 ~ 127 in BigInt
   var version = meta & BigInt.from(127).toInt();
 
-  assertNotNull(version == 4, 'unsupported extrinsic version');
+  assertionCheck(version == 4, 'unsupported extrinsic version');
 
   if (isNotEmpty(signed)) {
     var signature = codec.decode(chainDescription.signature, src);
@@ -36,7 +34,7 @@ dynamic decodeExtrinsic(dynamic rawExtrinsic, ChainDescription chainDescription,
 
 Uint8List encodeExtrinsic(Map<String, dynamic> extrinsic,
     ChainDescription chainDescription, scale_codec.Codec? codec) {
-  assertNotNull(extrinsic['version'] == 4, 'unsupported extrinsic version');
+  assertionCheck(extrinsic['version'] == 4, 'unsupported extrinsic version');
   codec = codec ?? scale_codec.Codec(chainDescription.types);
   var sink = scale_codec.ByteSink();
 

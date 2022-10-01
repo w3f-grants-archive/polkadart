@@ -1,5 +1,5 @@
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
-    show assertNotNull, TypeKind;
+    show assertionCheck, TypeKind;
 
 import 'types.dart';
 import 'types_hashing.dart' show getTypeHash;
@@ -32,12 +32,12 @@ class Registry {
   Registry(List<Type> types, int ti) {
     _types = types;
     var pallets = types[ti];
-    assertNotNull(pallets.kind == TypeKind.Variant);
+    assertionCheck(pallets.kind == TypeKind.Variant);
 
     for (var pallet in (pallets as VariantType).variants) {
-      assertNotNull(pallet.fields.length == 1);
+      assertionCheck(pallet.fields.length == 1);
       var palletType = types[pallet.fields[0].type];
-      assertNotNull(palletType.kind == TypeKind.Variant);
+      assertionCheck(palletType.kind == TypeKind.Variant);
       for (var def in (palletType as VariantType).variants) {
         _definitions['${pallet.name}.${def.name}'] = Definition(
           fields: def.fields,

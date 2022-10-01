@@ -47,7 +47,7 @@ class OldTypeRegistry {
       if (a is Type || (a is Map && a['kind'] != -1)) {
         return a;
       }
-      scale.assertNotNull(a is Map);
+      assertionCheck(a is Map);
       if (seen.contains(ti)) {
         throw Exception(
             'Cycle of non-constructable types involving ${a['name']}');
@@ -320,7 +320,7 @@ class OldTypeRegistry {
       case 256:
         return use('U$len');
       default:
-        scale.assertNotNull(len % 8 == 0, 'bit length must me aligned');
+        scale.assertionCheck(len % 8 == 0, 'bit length must me aligned');
         return use('[u8; ${len / 8}]');
     }
   }
@@ -345,7 +345,7 @@ class OldTypeRegistry {
         if (type is String) {
           fields.add(Field(type: use(type)));
         } else if (type != null) {
-          scale.assertNotNull(type is Map);
+          scale.assertionCheck(type is Map);
           for (var key in (type as Map).keys) {
             fields.add(Field(name: key, type: use(type[key])));
           }
@@ -385,7 +385,7 @@ class OldTypeRegistry {
   }
 
   Type get(int ti) {
-    return scale.assertNotNull(_types[ti]);
+    return assertNotNull(_types[ti]);
   }
 }
 

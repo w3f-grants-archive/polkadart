@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'package:substrate_metadata/utils/common_utils.dart';
 
 abstract class OldTypeDefinition {}
 
@@ -26,7 +26,7 @@ class SpecVersionRange extends ListMixin<int?> {
   final List<int?> _data = List<int?>.filled(2, null);
 
   SpecVersionRange(List<int?> value) {
-    scale.assertNotNull(value.length == 2);
+    assertionCheck(value.length == 2);
     this[0] = value[0];
     this[1] = value[1];
   }
