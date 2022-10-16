@@ -8,8 +8,6 @@ import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
 import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
 import 'package:substrate_metadata/schema/spec_version.model.dart';
 
-import '../types.dart';
-
 part './metadata/metadata_base.dart';
 part './metadata/metadata_versions.dart';
 part './extrinsics/extrinsics.dart';

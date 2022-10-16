@@ -17,7 +17,8 @@ class StorageEntryTypeV9 {
 
   /// Creates Class Object from `Json`
   static StorageEntryTypeV9 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Plain':
         return StorageEntryTypeV9_Plain.fromJson(map);
       case 'Map':
@@ -102,13 +103,14 @@ class StorageEntryTypeV10 {
 
   /// Creates Class Object from `Json`
   static StorageEntryTypeV10 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Plain':
-        return StorageEntryTypeV10_Plain.fromJson(map);
+        return StorageEntryTypeV10_Plain(value: map['Plain']);
       case 'Map':
-        return StorageEntryTypeV10_Map.fromJson(map);
+        return StorageEntryTypeV10_Map.fromJson(map['Map']);
       case 'DoubleMap':
-        return StorageEntryTypeV10_DoubleMap.fromJson(map);
+        return StorageEntryTypeV10_DoubleMap.fromJson(map['DoubleMap']);
       default:
         throw UnexpectedTypeException();
     }
@@ -187,13 +189,14 @@ class StorageEntryTypeV11 {
 
   /// Creates Class Object from `Json`
   static StorageEntryTypeV11 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Plain':
-        return StorageEntryTypeV11_Plain.fromJson(map);
+        return StorageEntryTypeV11_Plain(value: map['Plain']);
       case 'Map':
-        return StorageEntryTypeV11_Map.fromJson(map);
+        return StorageEntryTypeV11_Map.fromJson(map['Map']);
       case 'DoubleMap':
-        return StorageEntryTypeV11_DoubleMap.fromJson(map);
+        return StorageEntryTypeV11_DoubleMap.fromJson(map['DoubleMap']);
       default:
         throw UnexpectedTypeException();
     }
@@ -203,10 +206,6 @@ class StorageEntryTypeV11 {
 class StorageEntryTypeV11_Plain extends StorageEntryTypeV11 {
   final String value;
   const StorageEntryTypeV11_Plain({required this.value}) : super(kind: 'Plain');
-
-  /// Creates Class Object from `Json`
-  static StorageEntryTypeV11_Plain fromJson(Map<String, dynamic> map) =>
-      StorageEntryTypeV11_Plain(value: map['value']);
 }
 
 class StorageEntryTypeV11_Map extends StorageEntryTypeV11 {
@@ -272,15 +271,16 @@ class StorageEntryTypeV13 {
 
   /// Creates Class Object from `Json`
   static StorageEntryTypeV13 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Plain':
-        return StorageEntryTypeV13_Plain.fromJson(map);
+        return StorageEntryTypeV13_Plain(value: map['Plain']);
       case 'Map':
-        return StorageEntryTypeV13_Map.fromJson(map);
+        return StorageEntryTypeV13_Map.fromJson(map['Map']);
       case 'DoubleMap':
-        return StorageEntryTypeV13_DoubleMap.fromJson(map);
+        return StorageEntryTypeV13_DoubleMap.fromJson(map['DoubleMap']);
       case 'NMap':
-        return StorageEntryTypeV13_NMap.fromJson(map);
+        return StorageEntryTypeV13_NMap.fromJson(map['NMap']);
       default:
         throw UnexpectedTypeException();
     }
@@ -290,10 +290,6 @@ class StorageEntryTypeV13 {
 class StorageEntryTypeV13_Plain extends StorageEntryTypeV13 {
   final String value;
   const StorageEntryTypeV13_Plain({required this.value}) : super(kind: 'Plain');
-
-  /// Creates Class Object from `Json`
-  static StorageEntryTypeV13_Plain fromJson(Map<String, dynamic> map) =>
-      StorageEntryTypeV13_Plain(value: map['value']);
 }
 
 class StorageEntryTypeV13_Map extends StorageEntryTypeV13 {

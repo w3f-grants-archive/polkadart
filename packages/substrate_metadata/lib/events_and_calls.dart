@@ -1,19 +1,17 @@
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
-    show assertionCheck, TypeKind;
-
-import 'types.dart';
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'package:substrate_metadata/utils/common_utils.dart';
 import 'types_hashing.dart' show getTypeHash;
 import 'utils/utils.dart' show sha256;
 
-class Definition extends Variant {
+class Definition extends scale.Variant {
   final String pallet;
 
   @override
-  List<Field> fields;
+  List<scale.Field> fields;
   @override
   List<String>? docs;
   Definition(
-      {this.fields = const <Field>[],
+      {this.fields = const <scale.Field>[],
       required int index,
       required this.pallet,
       required String name,
@@ -27,18 +25,18 @@ class Registry {
   Map<String, Definition> get definitions => _definitions;
 
   final _hashes = <String, String>{};
-  late List<Type> _types;
+  late List<scale.Type> _types;
 
-  Registry(List<Type> types, int ti) {
+  Registry(List<scale.Type> types, int ti) {
     _types = types;
     var pallets = types[ti];
-    assertionCheck(pallets.kind == TypeKind.Variant);
+    assertionCheck(pallets.kind == scale.TypeKind.Variant);
 
-    for (var pallet in (pallets as VariantType).variants) {
+    for (var pallet in (pallets as scale.VariantType).variants) {
       assertionCheck(pallet.fields.length == 1);
       var palletType = types[pallet.fields[0].type];
-      assertionCheck(palletType.kind == TypeKind.Variant);
-      for (var def in (palletType as VariantType).variants) {
+      assertionCheck(palletType.kind == scale.TypeKind.Variant);
+      for (var def in (palletType as scale.VariantType).variants) {
         _definitions['${pallet.name}.${def.name}'] = Definition(
           fields: def.fields,
           index: def.index,

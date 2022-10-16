@@ -8,115 +8,108 @@ void main() {
       '0x021000040000010608000c000bebc50fb22d140a130000010608000c000bebc50fb22d14010300286bee0d0100040001010016b8bbfec7ffe9b4ea5dd9b6d6146e96b6f56232a4f7628422133050a4b31069';
 
   final xcmMap1 = <String, dynamic>{
-    '__kind': 'V0',
-    'value': {
-      'assets': [
-        {'__kind': 'All', 'value': null},
-        {'__kind': 'AllAbstractFungible', 'value': []},
-        {'__kind': 'All', 'value': null},
-        {'__kind': 'AllNonFungible', 'value': null}
-      ],
-      'effects': [],
-      '__kind': 'TeleportAsset'
+    'V0': {
+      'TeleportAsset': {
+        'assets': [
+          {'All': null},
+          {'AllAbstractFungible': []},
+          {'All': null},
+          {'AllNonFungible': null}
+        ],
+        'effects': [],
+      }
     }
   };
 
   final xcmMap2 = <String, dynamic>{
-    '__kind': 'V2',
-    'value': [
+    'V2': [
       {
-        '__kind': 'WithdrawAsset',
-        'value': [
+        'WithdrawAsset': [
           {
             'id': {
-              '__kind': 'Concrete',
-              'value': {
+              'Concrete': {
                 'parents': 0,
                 'interior': {
-                  '__kind': 'X1',
-                  'value': {
-                    '__kind': 'GeneralKey',
-                    'value': [0, 12]
+                  'X1': {
+                    'GeneralKey': [0, 12]
                   }
                 }
               }
             },
-            'fungibility': {'__kind': 'Fungible', 'value': 22186493461995}
+            'fungibility': {'Fungible': 22186493461995}
           }
         ]
       },
-      {'__kind': 'ClearOrigin', 'value': null},
+      {'ClearOrigin': null},
       {
-        'fees': {
-          'id': {
-            '__kind': 'Concrete',
-            'value': {
-              'parents': 0,
-              'interior': {
-                '__kind': 'X1',
-                'value': {
-                  '__kind': 'GeneralKey',
-                  'value': [0, 12]
+        'BuyExecution': {
+          'fees': {
+            'id': {
+              'Concrete': {
+                'parents': 0,
+                'interior': {
+                  'X1': {
+                    'GeneralKey': [0, 12]
+                  }
+                }
+              }
+            },
+            'fungibility': {'Fungible': 22186493461995}
+          },
+          'weightLimit': {'Limited': 4000000000},
+        }
+      },
+      {
+        'DepositAsset': {
+          'assets': {
+            'Wild': {'All': null}
+          },
+          'maxAssets': 1,
+          'beneficiary': {
+            'parents': 0,
+            'interior': {
+              'X1': {
+                'AccountId32': {
+                  'network': {'Any': null},
+                  'id': [
+                    22,
+                    184,
+                    187,
+                    254,
+                    199,
+                    255,
+                    233,
+                    180,
+                    234,
+                    93,
+                    217,
+                    182,
+                    214,
+                    20,
+                    110,
+                    150,
+                    182,
+                    245,
+                    98,
+                    50,
+                    164,
+                    247,
+                    98,
+                    132,
+                    34,
+                    19,
+                    48,
+                    80,
+                    164,
+                    179,
+                    16,
+                    105
+                  ],
                 }
               }
             }
-          },
-          'fungibility': {'__kind': 'Fungible', 'value': 22186493461995}
-        },
-        'weightLimit': {'__kind': 'Limited', 'value': 4000000000},
-        '__kind': 'BuyExecution'
-      },
-      {
-        'assets': {
-          '__kind': 'Wild',
-          'value': {'__kind': 'All', 'value': null}
-        },
-        'maxAssets': 1,
-        'beneficiary': {
-          'parents': 0,
-          'interior': {
-            '__kind': 'X1',
-            'value': {
-              'network': {'__kind': 'Any', 'value': null},
-              'id': [
-                22,
-                184,
-                187,
-                254,
-                199,
-                255,
-                233,
-                180,
-                234,
-                93,
-                217,
-                182,
-                214,
-                20,
-                110,
-                150,
-                182,
-                245,
-                98,
-                50,
-                164,
-                247,
-                98,
-                132,
-                34,
-                19,
-                48,
-                80,
-                164,
-                179,
-                16,
-                105
-              ],
-              '__kind': 'AccountId32'
-            }
           }
-        },
-        '__kind': 'DepositAsset'
+        }
       }
     ]
   };

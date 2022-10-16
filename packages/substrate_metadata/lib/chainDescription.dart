@@ -3,15 +3,11 @@
 import 'dart:typed_data';
 
 import 'package:cached_annotation/cached_annotation.dart';
-import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
-import 'package:substrate_metadata/utils/common_utils.dart';
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart';
+import 'package:substrate_metadata/old/legacy_types.dart';
 
-import './old/types.dart';
 import 'models/models.dart';
-import 'old/type_registry.dart';
 import 'storage.dart';
-import 'types.dart';
-import 'utils/utils.dart';
 
 part 'chainDescription.cached.dart';
 
@@ -49,17 +45,17 @@ class Constant {
 }
 
 ChainDescription getChainDescriptionFromMetadata(
-    Metadata metadata, OldTypes? oldTypes) {
+    Metadata metadata, LegacyTypes? legacyTypes) {
   switch (metadata.kind) {
-    case "V9":
-    case "V10":
-    case "V11":
-    case "V12":
-    case "V13":
-      assertNotNull(oldTypes,
+    case 'V9':
+    case 'V10':
+    case 'V11':
+    case 'V12':
+    case 'V13':
+      assertNotNull(legacyTypes,
           'Type definitions are required for metadata ${metadata.kind}');
-      return FromOld(metadata, oldTypes!).convert();
-    case "V14":
+      return FromOld(metadata, legacyTypes!).convert();
+    case 'V14':
       return FromV14((metadata as Metadata_V14).value).convert();
     default:
       throw Exception('Unsupported metadata version: ${metadata.kind}');
@@ -92,11 +88,11 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _digestItem() {
     var digest = _types()[_digest()];
-    scale.assertionCheck(digest.kind == scale.TypeKind.Composite);
+    assertionCheck(digest.kind == TypeKind.Composite);
     for (var field in (digest as CompositeType).fields) {
       if (field.name == 'logs') {
         var seq = _types()[field.type];
-        scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
+        assertionCheck(seq.kind == TypeKind.Sequence);
         return (seq as SequenceType).type;
       }
     }
@@ -106,7 +102,7 @@ abstract class FromV14 implements _$FromV14 {
   @Cached()
   int _event() {
     var rec = _types()[_eventRecord()];
-    scale.assertionCheck(rec.kind == scale.TypeKind.Composite);
+    assertionCheck(rec.kind == TypeKind.Composite);
     Field? eventField;
     for (var f in (rec as CompositeType).fields) {
       if (f.name == 'event') {
@@ -114,7 +110,7 @@ abstract class FromV14 implements _$FromV14 {
         break;
       }
     }
-    scale.assertionCheck(eventField != null);
+    assertionCheck(eventField != null);
     return eventField!.type;
   }
 
@@ -123,13 +119,24 @@ abstract class FromV14 implements _$FromV14 {
     var types = _types();
     var eventRecordList = _eventRecordList();
     var seq = types[eventRecordList];
-    scale.assertionCheck(seq.kind == scale.TypeKind.Sequence);
+    assertionCheck(seq.kind == TypeKind.Sequence);
     return (seq as SequenceType).type;
   }
 
   @Cached()
   int _eventRecordList() {
     return _getStorageItem('System', 'Events').value;
+  }
+
+  bool _isUnitType(Type type) {
+    if (type.kind == TypeKind.Tuple) {
+      try {
+        return (type as TupleType).tuple.isEmpty;
+      } catch (e) {
+        rethrow;
+      }
+    }
+    return false;
   }
 
   @Cached()
@@ -142,7 +149,7 @@ abstract class FromV14 implements _$FromV14 {
           .map((ext) {
             return Field(name: ext.identifier, type: ext.type!);
           })
-          .where((f) => !isUnitType(types.getUnwrappedType(f.type)))
+          .where((f) => !_isUnitType(types.getUnwrappedType(f.type)))
           .toList(),
     );
 
@@ -152,11 +159,11 @@ abstract class FromV14 implements _$FromV14 {
 
     Type signatureType = CompositeType(fields: [
       Field(
-        name: "address",
+        name: 'address',
         type: _address(),
       ),
       Field(
-        name: "signature",
+        name: 'signature',
         type: _extrinsicSignature(),
       ),
       Field(name: 'signedExtensions', type: signedExtensions),
@@ -236,14 +243,14 @@ abstract class FromV14 implements _$FromV14 {
               keys = [(e.type as StorageEntryTypeV14_Map).key];
             } else {
               var keyDef = _types()[(e.type as StorageEntryTypeV14_Map).key];
-              scale.assertionCheck(keyDef.kind == scale.TypeKind.Tuple);
-              scale.assertionCheck(
+              assertionCheck(keyDef.kind == TypeKind.Tuple);
+              assertionCheck(
                   (keyDef as TupleType).tuple.length == hashers.length);
               keys = keyDef.tuple;
             }
             break;
           default:
-            throw scale.UnexpectedCaseException();
+            throw UnexpectedCaseException();
         }
         items[e.name] = StorageItem(
             modifier: e.modifier.kind,
@@ -272,7 +279,7 @@ abstract class FromV14 implements _$FromV14 {
 
   @Cached()
   List<Type> _types() {
-    List<Type> types = _metadata.lookup?.types.map((t) {
+    List<Type> typesValue = _metadata.lookup?.types.map((PortableTypeV14 t) {
           var info = {'path': t.type.path, 'docs': t.type.docs};
           var def = t.type.def;
           switch (def.kind) {
@@ -282,19 +289,20 @@ abstract class FromV14 implements _$FromV14 {
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "Compact":
+            case 'Compact':
+              // ignore: unnecessary_cast
               return CompactType(
                 type: (def as Si1TypeDef_Compact).value.type,
                 path: info['path'],
                 docs: info['docs'],
-              );
-            case "Sequence":
+              ) as Type;
+            case 'Sequence':
               return SequenceType(
                 type: (def as Si1TypeDef_Sequence).value.type,
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "BitSequence":
+            case 'BitSequence':
               return BitSequenceType(
                 bitStoreType:
                     (def as Si1TypeDef_BitSequence).value.bitStoreType,
@@ -302,68 +310,128 @@ abstract class FromV14 implements _$FromV14 {
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "Array":
+            case 'Array':
               return ArrayType(
                 type: (def as Si1TypeDef_Array).value.type,
                 len: def.value.len,
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "Tuple":
+            case 'Tuple':
               return TupleType(
                 tuple: (def as Si1TypeDef_Tuple).value,
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "Composite":
+            case 'Composite':
               return CompositeType(
                 fields: (def as Si1TypeDef_Composite).value.fields,
                 path: info['path'],
                 docs: info['docs'],
               );
-            case "Variant":
+            case 'Variant':
               return VariantType(
                 variants: (def as Si1TypeDef_Variant).value.variants,
                 path: info['path'],
                 docs: info['docs'],
               );
             default:
-              throw scale.UnexpectedCaseException(def.kind);
+              throw UnexpectedCaseException(def.kind);
           }
         }).toList() ??
         <Type>[];
 
-    return normalizeMetadataTypes(types);
+    /* List<Type> types = _metadata.lookup?.types.map((PortableTypeV14 t) {
+          var info = {'path': t.type.path, 'docs': t.type.docs};
+          var def = t.type.def;
+          switch (def.kind) {
+            case 'Primitive':
+              return PrimitiveType(
+                primitive: (def as Si1TypeDef_Primitive).value.kind,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Compact':
+              return CompactType(
+                type: (def as Si1TypeDef_Compact).value.type,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Sequence':
+              return SequenceType(
+                type: (def as Si1TypeDef_Sequence).value.type,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'BitSequence':
+              return BitSequenceType(
+                bitStoreType:
+                    (def as Si1TypeDef_BitSequence).value.bitStoreType,
+                bitOrderType: def.value.bitOrderType,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Array':
+              return ArrayType(
+                type: (def as Si1TypeDef_Array).value.type,
+                len: def.value.len,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Tuple':
+              return TupleType(
+                tuple: (def as Si1TypeDef_Tuple).value,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Composite':
+              return CompositeType(
+                fields: (def as Si1TypeDef_Composite).value.fields,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            case 'Variant':
+              return VariantType(
+                variants: (def as Si1TypeDef_Variant).value.variants,
+                path: info['path'],
+                docs: info['docs'],
+              );
+            default:
+              throw UnexpectedCaseException(def.kind);
+          }
+        }) ?? <Type>[]; */
+
+    return OldTypeRegistry().normalizeMetadataTypes(typesValue);
   }
 }
 
 @WithCache()
 abstract class FromOld implements _$FromOld {
   late OldTypeRegistry _registry;
-  factory FromOld(Metadata _metadata, OldTypes _oldTypes) = _FromOld;
+  factory FromOld(Metadata _metadata, LegacyTypes _legacyTypes) = _FromOld;
 
-  ///
-  /// TODO: find a way to generate constructor with initialization
-  ///
-  /// _FromOld(this._metadata, this._oldTypes) {
-  ///   _registry = OldTypeRegistry(_oldTypes);
-  ///   _defineGenericExtrinsicEra();
-  ///   _defineGenericLookupSource();
-  ///   _defineOriginCaller();
-  ///   _defineGenericCall();
-  ///   _defineGenericEvent();
-  ///   _defineGenericSignature();
-  /// }
-  ///
+  /* 
+   TODO: find a way to generate constructor with initialization
+  
+   _FromOld(this._metadata, this._legacyTypes) {
+     _registry = OldTypeRegistry(_legacyTypes);
+     _defineGenericExtrinsicEra();
+     _defineGenericLookupSource();
+     _defineOriginCaller();
+     _defineGenericCall();
+     _defineGenericEvent();
+     _defineGenericSignature();
+   }
+   */
 
   ChainDescription convert() {
-    var signature = _registry.use('GenericSignature');
-    var call = _registry.use('GenericCall');
-    var digest = _registry.use('Digest');
-    var digestItem = _registry.use('DigestItem');
-    var event = _registry.use('GenericEvent');
-    var eventRecord = _registry.use('EventRecord');
-    var eventRecordList = _registry.use('Vec<EventRecord>');
+    var signature = _registry.getIndex('GenericSignature');
+    var call = _registry.getIndex('GenericCall');
+    var digest = _registry.getIndex('Digest');
+    var digestItem = _registry.getIndex('DigestItem');
+    var event = _registry.getIndex('GenericEvent');
+    var eventRecord = _registry.getIndex('EventRecord');
+    var eventRecordList = _registry.getIndex('Vec<EventRecord>');
     var storage = _storage();
     var constants = _constants();
 
@@ -381,10 +449,11 @@ abstract class FromOld implements _$FromOld {
   }
 
   void _defineGenericSignature() {
-    _registry.define("GenericSignature", () {
+    _registry.define('GenericSignature', () {
       return CompositeType(fields: [
-        Field(name: "address", type: _registry.use("Address")),
-        Field(name: "signature", type: _registry.use("ExtrinsicSignature")),
+        Field(name: 'address', type: _registry.getIndex('Address')),
+        Field(
+            name: 'signature', type: _registry.getIndex('ExtrinsicSignature')),
         Field(name: 'signedExtensions', type: _signedExtensions()),
       ]);
     });
@@ -394,21 +463,21 @@ abstract class FromOld implements _$FromOld {
   int _signedExtensions() {
     var fields = <Field>[];
     switch (_metadata.kind) {
-      case "V9":
-      case "V10":
+      case 'V9':
+      case 'V10':
         _addSignedExtensionField(fields, 'CheckEra');
         _addSignedExtensionField(fields, 'CheckNonce');
         _addSignedExtensionField(fields, 'ChargeTransactionPayment');
         break;
-      case "V11":
-      case "V12":
-      case "V13":
+      case 'V11':
+      case 'V12':
+      case 'V13':
         for (var name in _metadata.value.extrinsic.signedExtensions) {
           _addSignedExtensionField(fields, name);
         }
         break;
       default:
-        throw scale.UnexpectedCaseException(_metadata.kind);
+        throw UnexpectedCaseException(_metadata.kind);
     }
     return _registry.add(CompositeType(fields: fields));
   }
@@ -420,18 +489,18 @@ abstract class FromOld implements _$FromOld {
   }
 
   int? _getSignedExtensionType(String name) {
-    var def = _oldTypes.signedExtensions?[name];
+    var def = _legacyTypes.signedExtensions?[name];
     if (isNotEmpty(def)) {
-      return _registry.use(def);
+      return _registry.getIndex(def);
     }
     switch (name) {
       case 'ChargeTransactionPayment':
-        return _registry.use('Compact<Balance>');
+        return _registry.getIndex('Compact<Balance>');
       case 'CheckMortality':
       case 'CheckEra':
-        return _registry.use('ExtrinsicEra');
+        return _registry.getIndex('ExtrinsicEra');
       case 'CheckNonce':
-        return _registry.use('Compact<Index>');
+        return _registry.getIndex('Compact<Index>');
       case 'CheckBlockGasLimit':
       case 'CheckGenesis':
       case 'CheckNonZeroSender':
@@ -456,7 +525,7 @@ abstract class FromOld implements _$FromOld {
       for (var index = 1; index < 256; index++) {
         variants.add(Variant(
             name: 'Mortal$index',
-            fields: [Field(type: _registry.use('U8'))],
+            fields: [Field(type: _registry.getIndex('U8'))],
             index: index));
       }
 
@@ -505,7 +574,7 @@ abstract class FromOld implements _$FromOld {
       int index = entry.key;
       EventMetadataV9 e = entry.value;
       var fields = e.args.map((arg) {
-        return Field(type: _registry.use(arg, pallet: palletName));
+        return Field(type: _registry.getIndex(arg, pallet: palletName));
       }).toList();
 
       return Variant(index: index, name: e.name, fields: fields, docs: e.docs);
@@ -520,7 +589,8 @@ abstract class FromOld implements _$FromOld {
       var call = entry.value;
       var fields = call.args.map((arg) {
         return Field(
-            name: arg.name, type: _registry.use(arg.type, pallet: palletName));
+            name: arg.name,
+            type: _registry.getIndex(arg.type, pallet: palletName));
       }).toList();
       return Variant(
           index: index, name: call.name, fields: fields, docs: call.docs);
@@ -536,19 +606,19 @@ abstract class FromOld implements _$FromOld {
       }
       variants.add(Variant(
           name: 'IdxU16',
-          fields: [Field(type: _registry.use('U16'))],
+          fields: [Field(type: _registry.getIndex('U16'))],
           index: 0xfc));
       variants.add(Variant(
           name: 'IdxU32',
-          fields: [Field(type: _registry.use('U32'))],
+          fields: [Field(type: _registry.getIndex('U32'))],
           index: 0xfd));
       variants.add(Variant(
           name: 'IdxU64',
-          fields: [Field(type: _registry.use('U64'))],
+          fields: [Field(type: _registry.getIndex('U64'))],
           index: 0xfe));
       variants.add(Variant(
           name: 'AccountId',
-          fields: [Field(type: _registry.use('AccountId'))],
+          fields: [Field(type: _registry.getIndex('AccountId'))],
           index: 0xff));
       return VariantType(variants: variants);
     });
@@ -572,18 +642,18 @@ abstract class FromOld implements _$FromOld {
             break;
           case 'Map':
             hashers = [e.type.hasher.kind];
-            keys = [_registry.use(e.type.key, pallet: mod.name)];
+            keys = [_registry.getIndex(e.type.key, pallet: mod.name)];
             break;
           case 'DoubleMap':
             hashers = [e.type.hasher.kind, e.type.key2Hasher.kind];
             keys = [
-              _registry.use(e.type.key1, pallet: mod.name),
-              _registry.use(e.type.key2, pallet: mod.name)
+              _registry.getIndex(e.type.key1, pallet: mod.name),
+              _registry.getIndex(e.type.key2, pallet: mod.name)
             ];
             break;
           case 'NMap':
             keys = e.type.keyVec
-                .map((k) => _registry.use(k, pallet: mod.name))
+                .map((k) => _registry.getIndex(k, pallet: mod.name))
                 .toList()
                 .cast<int>();
             hashers = e.type.hashers
@@ -592,13 +662,13 @@ abstract class FromOld implements _$FromOld {
                 .cast<String>();
             break;
           default:
-            throw scale.UnexpectedCaseException();
+            throw UnexpectedCaseException();
         }
         items[e.name] = StorageItem(
             modifier: e.modifier.kind,
             hashers: hashers,
             keys: keys,
-            value: _registry.use(e.type.value, pallet: mod.name),
+            value: _registry.getIndex(e.type.value, pallet: mod.name),
             fallback: e.fallback,
             docs: e.docs);
       });
@@ -615,7 +685,7 @@ abstract class FromOld implements _$FromOld {
         constants[mod.name] ??= <String, Constant>{};
         var pc = constants[mod.name]!;
         pc[c.name] = Constant(
-            type: _registry.use(c.type, pallet: mod.name),
+            type: _registry.getIndex(c.type, pallet: mod.name),
             value: c.value,
             docs: c.docs);
       }
@@ -654,7 +724,7 @@ abstract class FromOld implements _$FromOld {
         variants.add(Variant(
             name: mod.name,
             index: index,
-            fields: [Field(type: _registry.use(type))]));
+            fields: [Field(type: _registry.getIndex(type))]));
       });
       return VariantType(variants: variants, path: ['OriginCaller']);
     });

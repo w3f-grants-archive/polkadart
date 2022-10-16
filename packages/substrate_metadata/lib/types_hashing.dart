@@ -4,13 +4,12 @@ import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
 import 'package:weak_map/weak_map.dart';
 
 import '../utils/common_utils.dart';
-import 'types.dart';
 import 'utils/utils.dart';
 
 // ignore: non_constant_identifier_names
-final HASHERS = WeakMap<List<Type>, TypeHasher>();
+final HASHERS = WeakMap<List<scale.Type>, TypeHasher>();
 
-TypeHasher getTypeHasher(List<Type> registry) {
+TypeHasher getTypeHasher(List<scale.Type> registry) {
   var hasher = HASHERS.get(registry);
   if (hasher == null) {
     hasher = TypeHasher(registry);
@@ -22,7 +21,7 @@ TypeHasher getTypeHasher(List<Type> registry) {
 ///
 ///Get a strong hash of substrate type, which can be used for equality derivation
 ///
-String getTypeHash(List<Type> registry, int type) {
+String getTypeHash(List<scale.Type> registry, int type) {
   return getTypeHasher(registry).getHash(type);
 }
 
@@ -72,16 +71,16 @@ class TypeHasher {
   int _index = 1;
   List<HashNode?> _nodes = <HashNode?>[];
   final List<int> _stack = <int>[];
-  List<Type> _types = <Type>[];
+  List<scale.Type> _types = <scale.Type>[];
 
-  TypeHasher(List<Type> types) {
+  TypeHasher(List<scale.Type> types) {
     _types = types;
     _cache = List<String>.filled(types.length, '');
     _nodes = List<HashNode?>.filled(types.length, null);
   }
 
   String getHash(int type) {
-    assert(type >= 0 && type < _types.length);
+    assertionCheck(type >= 0 && type < _types.length);
     var hash = _cache[type];
     if (isNotEmpty(hash)) {
       return hash;
@@ -158,29 +157,29 @@ class TypeHasher {
     switch (type.kind) {
       case scale.TypeKind.Primitive:
         return <String, String>{
-          'primitive': (type as PrimitiveType).primitive.name
+          'primitive': (type as scale.PrimitiveType).primitive.name
         };
       case scale.TypeKind.Compact:
         return <String, String>{
-          'compact': _hash((type as CompactType).type, parent)
+          'compact': _hash((type as scale.CompactType).type, parent)
         };
       case scale.TypeKind.Sequence:
         return <String, String>{
-          'sequence': _hash((type as SequenceType).type, parent)
+          'sequence': _hash((type as scale.SequenceType).type, parent)
         };
       case scale.TypeKind.Array:
         return <String, dynamic>{
           'array': {
-            'len': (type as ArrayType).len,
+            'len': (type as scale.ArrayType).len,
             'type': _hash(type.type, parent)
           }
         };
       case scale.TypeKind.BitSequence:
         return <String, bool>{'bitSequence': true};
       case scale.TypeKind.Tuple:
-        return _hashTuple((type as TupleType).tuple, parent);
+        return _hashTuple((type as scale.TupleType).tuple, parent);
       case scale.TypeKind.Composite:
-        if ((type as CompositeType).fields.isEmpty ||
+        if ((type as scale.CompositeType).fields.isEmpty ||
             type.fields[0].name == null) {
           return _hashTuple(
               type.fields.map((f) {
@@ -199,7 +198,7 @@ class TypeHasher {
       case scale.TypeKind.Variant:
         {
           var desc = <String, dynamic>{};
-          for (var v in (type as VariantType).variants) {
+          for (var v in (type as scale.VariantType).variants) {
             for (var idx = 0; idx < v.fields.length; idx++) {
               var field = v.fields[idx];
               dynamic name = field.name ?? idx;
@@ -213,7 +212,7 @@ class TypeHasher {
         }
       case scale.TypeKind.Option:
         return <String, String>{
-          'option': _hash((type as OptionType).type, parent)
+          'option': _hash((type as scale.OptionType).type, parent)
         };
       case scale.TypeKind.DoNotConstruct:
         return <String, dynamic>{'doNotConstruct': true};

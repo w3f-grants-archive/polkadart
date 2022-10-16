@@ -15,7 +15,8 @@ class StorageEntryModifierV9 {
 
   /// Creates Class Object from `Json`
   static StorageEntryModifierV9 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Optional':
         return StorageEntryModifierV9_Optional();
       case 'Default':
@@ -47,11 +48,12 @@ class StorageEntryTypeV14 {
 
   /// Creates Class Object from `Json`
   static StorageEntryTypeV14 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Plain':
-        return StorageEntryTypeV14_Plain.fromJson(map);
+        return StorageEntryTypeV14_Plain(value: map['Plain']);
       case 'Map':
-        return StorageEntryTypeV14_Map.fromJson(map);
+        return StorageEntryTypeV14_Map.fromJson(map['Map']);
       default:
         throw UnexpectedTypeException();
     }
@@ -63,10 +65,6 @@ class StorageEntryTypeV14_Plain extends StorageEntryTypeV14 {
   final int value;
   const StorageEntryTypeV14_Plain({required this.value})
       : super(kind: 'Plain', value: value);
-
-  /// Creates Class Object from `Json`
-  static StorageEntryTypeV14_Plain fromJson(Map<String, dynamic> map) =>
-      StorageEntryTypeV14_Plain(value: map['value']);
 }
 
 class StorageEntryTypeV14_Map extends StorageEntryTypeV14 {
@@ -114,7 +112,8 @@ class StorageHasherV9 {
 
   /// Creates Class Object from `Json`
   static StorageHasherV9 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Blake2_128':
         return StorageHasherV9_Blake2_128();
       case 'Blake2_256':
@@ -157,7 +156,8 @@ class StorageHasherV10 {
 
   /// Creates Class Object from `Json`
   static StorageHasherV10 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Blake2_128':
         return StorageHasherV10_Blake2_128();
       case 'Blake2_256':
@@ -206,7 +206,8 @@ class StorageHasherV11 {
 
   /// Creates Class Object from `Json`
   static StorageHasherV11 fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Blake2_128':
         return StorageHasherV11_Blake2_128();
       case 'Blake2_256':

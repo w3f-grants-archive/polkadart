@@ -308,12 +308,13 @@ class _FromV14 with FromV14 implements _$FromV14 {
 
 abstract class _$FromOld {
   Metadata get _metadata;
-  OldTypes get _oldTypes;
+  LegacyTypes get _legacyTypes;
 }
 
 class _FromOld with FromOld implements _$FromOld {
-  _FromOld(this._metadata, this._oldTypes) {
-    _registry = OldTypeRegistry(_oldTypes);
+  _FromOld(this._metadata, this._legacyTypes) {
+    _registry = OldTypeRegistry(
+        types: _legacyTypes.types, typesAlias: _legacyTypes.typesAlias);
     _defineGenericExtrinsicEra();
     _defineGenericLookupSource();
     _defineOriginCaller();
@@ -325,7 +326,7 @@ class _FromOld with FromOld implements _$FromOld {
   @override
   final Metadata _metadata;
   @override
-  final OldTypes _oldTypes;
+  final LegacyTypes _legacyTypes;
 
   final __signedExtensionsCached = <String, int>{};
   final __storageCached = <String, Map<String, Map<String, StorageItem>>>{};

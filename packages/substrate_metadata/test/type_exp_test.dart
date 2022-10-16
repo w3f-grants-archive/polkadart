@@ -1,24 +1,28 @@
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
 import 'package:test/test.dart';
-import 'package:substrate_metadata/old/type_exp.dart';
 
 void main() {
   group('Type expressions', () {
-    ast('A', NamedType(name: 'A', params: []));
+    ast('A', scale.RegistryNamedType(name: 'A', params: []));
 
     ast(
       '[A; 10]',
-      ArrayType(item: NamedType(name: 'A', params: []), len: 10),
+      scale.RegistryArrayType(
+          item: scale.RegistryNamedType(name: 'A', params: []), len: 10),
     );
 
-    ast('[u8; 16; H128]',
-        ArrayType(item: NamedType(name: 'u8', params: []), len: 16));
+    ast(
+        '[u8; 16; H128]',
+        scale.RegistryArrayType(
+            item: scale.RegistryNamedType(name: 'u8', params: []), len: 16));
 
     ast(
         '(A, B, [u8; 5])',
-        TupleType(params: [
-          NamedType(name: 'A', params: []),
-          NamedType(name: 'B', params: []),
-          ArrayType(item: NamedType(name: 'u8', params: []), len: 5)
+        scale.RegistryTupleType(params: [
+          scale.RegistryNamedType(name: 'A', params: []),
+          scale.RegistryNamedType(name: 'B', params: []),
+          scale.RegistryArrayType(
+              item: scale.RegistryNamedType(name: 'u8', params: []), len: 5)
         ]));
 
     testFunction('A');
@@ -46,15 +50,15 @@ void main() {
 
 void testFunction(String exp, [String? result]) {
   test(result != null ? '$exp -> $result' : exp, () {
-    var type = parse(exp);
+    var type = scale.TypeExpParser(exp).parse();
     var printed = type.toString();
     expect(printed, equals(result ?? exp));
   });
 }
 
-void ast(String exp, Type type) {
+void ast(String exp, scale.RegistryType type) {
   test('AST: $exp', () {
-    var parsed = parse(exp);
-    expect(parsed, equals(type));
+    var parsed = scale.TypeExpParser(exp).parse();
+    expect(parsed, type);
   });
 }

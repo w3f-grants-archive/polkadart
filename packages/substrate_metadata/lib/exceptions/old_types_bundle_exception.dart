@@ -1,5 +1,5 @@
-class OldTypesBundleException implements Exception {
-  const OldTypesBundleException([this.fileName, this.error]);
+class LegacyTypesBundleException implements Exception {
+  const LegacyTypesBundleException([this.fileName, this.error]);
 
   final String? fileName;
   final Object? error;
@@ -7,7 +7,7 @@ class OldTypesBundleException implements Exception {
   @override
   String toString() {
     return fileName == null || error == null
-        ? 'Failed to parse OldTypesBundle'
+        ? 'Failed to parse LegacyTypesBundle'
         : 'Failed to parse $fileName: $error';
   }
 }

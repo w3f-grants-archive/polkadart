@@ -1,25 +1,24 @@
 import '../../utils/common_utils.dart';
 import 'definitions/metadata/index.dart' as metadata_definitions;
-import 'definitions/substrate/src.dart';
-import 'types.dart';
+import 'definitions/substrate/substrate_types_bundle.dart';
+import 'legacy_types.dart';
 
-OldTypes getTypesFromBundle(OldTypesBundle bundle, int specVersion) {
-  var types = OldTypes(
+LegacyTypes getTypesFromBundle(LegacyTypesBundle bundle, int specVersion) {
+  var types = LegacyTypes(
     types: <String, dynamic>{
-      /// TODO: check `metadata_definitions.types.types` whether it is unwrapping every child element
-      /// or only types variable
       if (metadata_definitions.types.types != null)
         ...metadata_definitions.types.types!,
-      if (substrateBundle.types != null) ...substrateBundle.types!,
+      if (substrateTypesBundle.types != null) ...substrateTypesBundle.types!,
       if (bundle.types != null) ...bundle.types!,
     },
     typesAlias: <String, Map<String, String>>{
-      if (substrateBundle.typesAlias != null) ...substrateBundle.typesAlias!,
+      if (substrateTypesBundle.typesAlias != null)
+        ...substrateTypesBundle.typesAlias!,
       if (bundle.typesAlias != null) ...bundle.typesAlias!,
     },
     signedExtensions: <String, String>{
-      if (substrateBundle.signedExtensions != null)
-        ...substrateBundle.signedExtensions!,
+      if (substrateTypesBundle.signedExtensions != null)
+        ...substrateTypesBundle.signedExtensions!,
       if (bundle.signedExtensions != null) ...bundle.signedExtensions!,
     },
   );
@@ -51,7 +50,7 @@ OldTypes getTypesFromBundle(OldTypesBundle bundle, int specVersion) {
   return types;
 }
 
-bool isWithinRange(SpecVersionRange range, int version) {
+bool isWithinRange(List<int?> range, int version) {
   var beg = range[0] ?? 0;
   var end = range[1] ?? double.maxFinite;
   return beg <= version && version <= end;

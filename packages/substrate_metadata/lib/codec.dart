@@ -1,7 +1,8 @@
 import 'dart:typed_data';
+
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+
 import './old/definitions/metadata/index.dart' as metadata_definitions;
-import './old/type_registry.dart' as type_registry;
 import 'models/models.dart' as model;
 
 model.Metadata decodeMetadata(dynamic data) {
@@ -12,47 +13,47 @@ model.Metadata decodeMetadata(dynamic data) {
   } else {
     content = data;
   }
-  var src = scale.Src(content);
+  var source = scale.Source(content);
 
-  var magic = src.u32();
+  var magic = source.u32();
   scale.assertionCheck(
       magic == 0x6174656d, 'No magic number 0x6174656d at the start of data');
 
-  var version = src.u8();
+  var version = source.u8();
   scale.assertionCheck(
       9 <= version && version < 15, 'Invalid metadata version');
 
   // See https://github.com/polkadot-js/api/commit/a9211690be6b68ad6c6dad7852f1665cadcfa5b2
   // for why try-catch and version decoding stuff is here
   try {
-    return decode(version, src);
+    return decode(version, source);
   } catch (e) {
     if (version != 9) {
       rethrow;
     }
     try {
-      src = scale.Src(content);
-      src.u32();
-      src.u8();
-      return decode(10, src);
+      source = scale.Source(content);
+      source.u32();
+      source.u8();
+      return decode(10, source);
     } catch (anotherError) {
       rethrow;
     }
   }
 }
 
-model.Metadata decode(int version, scale.Src src) {
-  var metadataVal = codec.decode(versions[version - 9], src);
-  src.assertEOF();
+model.Metadata decode(int version, scale.Source source) {
+  var metadataVal = codec.decodeFromSource(versions[version - 9], source);
+  source.assertEOF();
   var meta = model.Metadata.fromVersion(metadataVal, version);
   return meta;
 }
 
 Map<String, dynamic> createScaleCodec() {
-  var registry = type_registry.OldTypeRegistry(metadata_definitions.types);
+  var registry = scale.OldTypeRegistry(types: metadata_definitions.types.types);
   var versions = List<int>.filled(6, 0);
   for (var i = 9; i < 15; i++) {
-    versions[i - 9] = registry.use('MetadataV$i');
+    versions[i - 9] = registry.getIndex('MetadataV$i');
   }
 
   return <String, dynamic>{

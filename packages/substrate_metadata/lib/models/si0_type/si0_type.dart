@@ -6,7 +6,8 @@ class Si0TypeDefPrimitive {
 
   /// Creates Class Object from `Json`
   static Si0TypeDefPrimitive fromJson(Map<String, dynamic> map) {
-    switch (map['__kind']) {
+    final key = map.keys.first;
+    switch (key) {
       case 'Bool':
         return Si0TypeDefPrimitive_Bool();
       case 'Char':
@@ -44,7 +45,7 @@ class Si0TypeDefPrimitive {
 }
 
 class Si0TypeDefPrimitive_Bool extends Si0TypeDefPrimitive {
-  const Si0TypeDefPrimitive_Bool() : super(kind: scale_codec.Primitive.Bool);
+  const Si0TypeDefPrimitive_Bool() : super(kind: scale_codec.Primitive.Boolean);
 }
 
 class Si0TypeDefPrimitive_Char extends Si0TypeDefPrimitive {

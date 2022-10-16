@@ -1,6 +1,6 @@
-import 'types_hashing.dart' show getTypeHash;
 import 'dart:typed_data';
-import 'types.dart' show Type;
+import 'package:polkadart_scale_codec/polkadart_scale_codec.dart' as scale;
+import 'types_hashing.dart' show getTypeHash;
 import 'utils/utils.dart' show sha256;
 
 class StorageItem {
@@ -23,7 +23,7 @@ class StorageItem {
   });
 }
 
-String getStorageItemTypeHash(List<Type> types, StorageItem item) {
+String getStorageItemTypeHash(List<scale.Type> types, StorageItem item) {
   return sha256(<String, dynamic>{
     'keys': item.keys.map((k) => getTypeHash(types, k)).toList(),
     'value': getTypeHash(types, item.value),

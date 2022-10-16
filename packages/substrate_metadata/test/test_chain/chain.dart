@@ -7,6 +7,7 @@ import 'package:cached_annotation/cached_annotation.dart';
 import 'package:path/path.dart' as path;
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
+import 'package:substrate_metadata/byte_sink.dart';
 import 'package:substrate_metadata/chainDescription.dart';
 import 'package:substrate_metadata/codec.dart';
 import 'package:substrate_metadata/events_and_calls.dart';
@@ -26,7 +27,7 @@ abstract class Chain implements _$Chain {
   factory Chain(String chainName) = _Chain;
 
   String _item(String name) {
-    return path.join('./test/chain', chainName, name);
+    return path.join('../../chain', chainName, name);
   }
 
   @Cached()
@@ -136,9 +137,11 @@ abstract class Chain implements _$Chain {
             () {
           for (var name in des.description.constants[pallet]!.keys) {
             var def = des.description.constants[pallet]![name];
-            var value = des.codec.decodeBinary(def!.type, def.value);
-            var encoded = des.codec.encodeToBinary(def.type, value);
-            expect(encoded, equals(def.value));
+            var value = des.codec.decode(def!.type, def.value);
+            final bytesSink = ByteDecoder();
+            des.codec.encodeWithSink(def.type, value, bytesSink);
+            final encoded = bytesSink.toBytes();
+            expect(encoded, def.value);
           }
         });
       }
@@ -173,8 +176,7 @@ abstract class Chain implements _$Chain {
       var b = decoded[i];
       test('Events: Encode/Decode: ${b.blockNumber}', () {
         var d = getVersion(b.blockNumber);
-        var events =
-            d.codec.encodeToHex(d.description.eventRecordList, b.events);
+        var events = d.codec.encode(d.description.eventRecordList, b.events);
         var encoded =
             RawBlockEvents(blockNumber: b.blockNumber, events: events);
         expect(encoded, equals(original[i]));
@@ -187,8 +189,7 @@ abstract class Chain implements _$Chain {
     var blocks = events();
     return blocks.map((b) {
       var d = getVersion(b.blockNumber);
-      var events =
-          d.codec.decodeBinary(d.description.eventRecordList, b.events);
+      var events = d.codec.decode(d.description.eventRecordList, b.events);
       return DecodedBlockEvents(blockNumber: b.blockNumber, events: events);
     }).toList();
   }
@@ -218,7 +219,7 @@ abstract class Chain implements _$Chain {
   List<VersionDescription> getDescription() {
     return versions().map((SpecVersion sv) {
       var metadata = decodeMetadata(sv.metadata);
-      var typesBundle = getOldTypesBundle(sv.specName);
+      var typesBundle = getLegacyTypesBundle(sv.specName);
       var types = typesBundle != null
           ? getTypesFromBundle(typesBundle, sv.specVersion)
           : null;
