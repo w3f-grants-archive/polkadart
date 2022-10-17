@@ -26,7 +26,7 @@ import '/old/definitions/shiden.dart' as shiden;
 import '/old/definitions/statemint.dart' as statemint;
 import '/old/definitions/subsocial.dart' as subsocial;
 import '/old/definitions/unique.dart' as unique;
-import 'exceptions/old_types_bundle_exception.dart';
+import 'exceptions/legacy_types_bundle_exception.dart';
 import 'old/legacy_types.dart';
 
 LegacyTypesBundle? getLegacyTypesBundle(String chain) {
