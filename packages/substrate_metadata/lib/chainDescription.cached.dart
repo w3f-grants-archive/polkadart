@@ -30,7 +30,7 @@ class _FromV14 with FromV14 implements _$FromV14 {
   final __uncheckedExtrinsicCached = <String, int>{};
   final __storageCached = <String, Map<String, Map<String, StorageItem>>>{};
   final __constantsCached = <String, Map<String, Map<String, Constant>>>{};
-  final __typesCached = <String, List<Type>>{};
+  final __typesCached = <String, List<scale_codec.Type>>{};
 
   @override
   int _digest() {
@@ -285,10 +285,10 @@ class _FromV14 with FromV14 implements _$FromV14 {
   }
 
   @override
-  List<Type> _types() {
+  List<scale_codec.Type> _types() {
     final cachedValue = __typesCached[""];
     if (cachedValue == null) {
-      final List<Type> toReturn;
+      final List<scale_codec.Type> toReturn;
       try {
         final result = super._types();
 
@@ -313,7 +313,7 @@ abstract class _$FromOld {
 
 class _FromOld with FromOld implements _$FromOld {
   _FromOld(this._metadata, this._legacyTypes) {
-    _registry = OldTypeRegistry(
+    _registry = scale_codec.OldTypeRegistry(
         types: _legacyTypes.types, typesAlias: _legacyTypes.typesAlias);
     _defineGenericExtrinsicEra();
     _defineGenericLookupSource();

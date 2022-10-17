@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
-
 bool isNotEmpty(dynamic value) {
   if (value == null) {
     return false;
