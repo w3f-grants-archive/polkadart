@@ -26,7 +26,7 @@ model.Metadata decodeMetadata(dynamic data) {
   // See https://github.com/polkadot-js/api/commit/a9211690be6b68ad6c6dad7852f1665cadcfa5b2
   // for why try-catch and version decoding stuff is here
   try {
-    return decode(version, source);
+    return _decode(version, source);
   } catch (e) {
     if (version != 9) {
       rethrow;
@@ -35,21 +35,21 @@ model.Metadata decodeMetadata(dynamic data) {
       source = scale.Source(content);
       source.u32();
       source.u8();
-      return decode(10, source);
+      return _decode(10, source);
     } catch (anotherError) {
       rethrow;
     }
   }
 }
 
-model.Metadata decode(int version, scale.Source source) {
+model.Metadata _decode(int version, scale.Source source) {
   var metadataVal = codec.decodeFromSource(versions[version - 9], source);
   source.assertEOF();
   var meta = model.Metadata.fromVersion(metadataVal, version);
   return meta;
 }
 
-Map<String, dynamic> createScaleCodec() {
+Map<String, dynamic> _createScaleCodec() {
   var registry = scale.OldTypeRegistry(types: metadata_definitions.types.types);
   var versions = List<int>.filled(6, 0);
   for (var i = 9; i < 15; i++) {
@@ -62,6 +62,6 @@ Map<String, dynamic> createScaleCodec() {
   };
 }
 
-final Map<String, dynamic> map = createScaleCodec();
+final Map<String, dynamic> map = _createScaleCodec();
 final scale.Codec codec = map['codec']!;
 final List<int> versions = map['versions']!;
