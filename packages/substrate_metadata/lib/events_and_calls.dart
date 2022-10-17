@@ -27,9 +27,9 @@ class Registry {
   final _hashes = <String, String>{};
   late List<scale.Type> _types;
 
-  Registry(List<scale.Type> types, int ti) {
+  Registry(List<scale.Type> types, int index) {
     _types = types;
-    var pallets = types[ti];
+    var pallets = types[index];
     assertionCheck(pallets.kind == scale.TypeKind.Variant);
 
     for (var pallet in (pallets as scale.VariantType).variants) {
