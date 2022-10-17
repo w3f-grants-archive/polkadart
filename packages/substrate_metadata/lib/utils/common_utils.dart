@@ -42,17 +42,3 @@ void assertionCheck(bool val, [String? msg]) {
 List<String> readLines(String filePath) {
   return File(filePath).readAsLinesSync();
 }
-
-BigInt parseBigInt(dynamic bigInt) {
-  if (bigInt is num) {
-    return BigInt.from(bigInt);
-  } else if (bigInt is String) {
-    if (bigInt.endsWith('n') && bigInt.length > 1) {
-      ///
-      /// checked if bigint has a number appended with 'n' or not
-      return BigInt.parse(bigInt.substring(0, bigInt.length - 1));
-    }
-    return BigInt.parse(bigInt);
-  }
-  throw UnexpectedTypeException();
-}
