@@ -7,7 +7,7 @@ import 'package:cached_annotation/cached_annotation.dart';
 import 'package:path/path.dart' as path;
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
-import 'package:substrate_metadata/byte_sink.dart';
+import 'package:substrate_metadata/utils/byte_decoder.dart';
 import 'package:substrate_metadata/chainDescription.dart';
 import 'package:substrate_metadata/codec.dart';
 import 'package:substrate_metadata/events_and_calls.dart';

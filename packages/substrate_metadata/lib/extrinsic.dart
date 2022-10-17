@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
-import 'package:substrate_metadata/byte_sink.dart';
+import 'package:substrate_metadata/utils/byte_decoder.dart';
 import 'package:substrate_metadata/utils/common_utils.dart';
 
 import 'chainDescription.dart';
