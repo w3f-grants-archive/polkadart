@@ -39,7 +39,7 @@ class Si0TypeDefPrimitive {
       case 'I256':
         return Si0TypeDefPrimitive_I256();
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }

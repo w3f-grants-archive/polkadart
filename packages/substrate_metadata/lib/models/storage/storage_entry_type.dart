@@ -26,7 +26,7 @@ class StorageEntryTypeV9 {
       case 'DoubleMap':
         return StorageEntryTypeV9_DoubleMap.fromJson(map);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -112,7 +112,7 @@ class StorageEntryTypeV10 {
       case 'DoubleMap':
         return StorageEntryTypeV10_DoubleMap.fromJson(map['DoubleMap']);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -198,7 +198,7 @@ class StorageEntryTypeV11 {
       case 'DoubleMap':
         return StorageEntryTypeV11_DoubleMap.fromJson(map['DoubleMap']);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -282,7 +282,7 @@ class StorageEntryTypeV13 {
       case 'NMap':
         return StorageEntryTypeV13_NMap.fromJson(map['NMap']);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }

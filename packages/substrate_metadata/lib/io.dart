@@ -26,7 +26,7 @@ import '/old/definitions/shiden.dart' as shiden;
 import '/old/definitions/statemint.dart' as statemint;
 import '/old/definitions/subsocial.dart' as subsocial;
 import '/old/definitions/unique.dart' as unique;
-import 'exceptions/legacy_types_bundle_exception.dart';
+import 'exceptions/exceptions.dart';
 import 'old/legacy_types.dart';
 
 LegacyTypesBundle? getLegacyTypesBundle(String chain) {
@@ -94,20 +94,4 @@ LegacyTypesBundle? getLegacyTypesBundle(String chain) {
     default:
       return null;
   }
-}
-
-LegacyTypesBundle readLegacyTypesBundle(String file) {
-  late String content;
-  try {
-    content = File(file).readAsStringSync();
-  } catch (e) {
-    throw LegacyTypesBundleException(file, e);
-  }
-  late LegacyTypesBundle json;
-  try {
-    json = LegacyTypesBundle.fromMap(jsonDecode(content));
-  } catch (e) {
-    throw LegacyTypesBundleException(file, e);
-  }
-  return json;
 }

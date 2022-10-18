@@ -306,13 +306,13 @@ class _FromV14 with FromV14 implements _$FromV14 {
   }
 }
 
-abstract class _$FromOld {
+abstract class _$FromLegacy {
   Metadata get _metadata;
   LegacyTypes get _legacyTypes;
 }
 
-class _FromOld with FromOld implements _$FromOld {
-  _FromOld(this._metadata, this._legacyTypes) {
+class _FromLegacy with FromLegacy implements _$FromLegacy {
+  _FromLegacy(this._metadata, this._legacyTypes) {
     _registry = scale_codec.OldTypeRegistry(
         types: _legacyTypes.types, typesAlias: _legacyTypes.typesAlias);
     _defineGenericExtrinsicEra();

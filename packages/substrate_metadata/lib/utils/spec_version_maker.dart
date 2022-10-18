@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:json_schema2/json_schema2.dart';
-
-import '../exceptions/spec_file_exception.dart';
+import 'package:substrate_metadata/exceptions/exceptions.dart';
 import '/schema/spec_version.model.dart';
 import '../schema/spec_version_schema.dart';
 

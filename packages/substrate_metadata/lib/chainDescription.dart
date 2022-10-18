@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:cached_annotation/cached_annotation.dart';
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
-import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
+import 'package:substrate_metadata/exceptions/exceptions.dart';
 import 'package:substrate_metadata/old/legacy_types.dart';
 import 'package:substrate_metadata/utils/common_utils.dart';
 
@@ -55,9 +55,9 @@ ChainDescription getChainDescriptionFromMetadata(
     case 'V11':
     case 'V12':
     case 'V13':
-      assertNotNull(legacyTypes,
-          'scale_codec.Type definitions are required for metadata ${metadata.kind}');
-      return FromOld(metadata, legacyTypes!).convert();
+      assertionCheck(legacyTypes != null,
+          'Type definitions are required for metadata ${metadata.kind}');
+      return FromLegacy(metadata, legacyTypes!).convert();
     case 'V14':
       return FromV14((metadata as Metadata_V14).value).convert();
     default:
@@ -210,7 +210,7 @@ abstract class FromV14 implements _$FromV14 {
     if (def.type.params.length <= idx) {
       var name = def.type.path.isNotEmpty ? def.type.path.join('::') : '$ti';
       throw Exception(
-          'scale_codec.Type $name should have at least ${idx + 1} type parameter${idx > 0 ? 's' : ''}');
+          'Type $name should have at least ${idx + 1} type parameter${idx > 0 ? 's' : ''}');
     }
     return assertNotNull(def.type.params[idx].type);
   }
@@ -253,7 +253,7 @@ abstract class FromV14 implements _$FromV14 {
             }
             break;
           default:
-            throw UnexpectedCaseException();
+            throw UnexpectedKindException('Unexpected kind: ${e.type.kind}.');
         }
         items[e.name] = StorageItem(
             modifier: e.modifier.kind,
@@ -333,7 +333,7 @@ abstract class FromV14 implements _$FromV14 {
                     path: info['path'],
                     docs: info['docs'],
                   );
-                case 'scale_codec.Variant':
+                case 'Variant':
                   return scale_codec.VariantType(
                     variants: (def as Si1TypeDef_Variant).value.variants,
                     path: info['path'],
@@ -349,15 +349,16 @@ abstract class FromV14 implements _$FromV14 {
 }
 
 @WithCache()
-abstract class FromOld implements _$FromOld {
+abstract class FromLegacy implements _$FromLegacy {
   late scale_codec.OldTypeRegistry _registry;
-  factory FromOld(Metadata _metadata, LegacyTypes _legacyTypes) = _FromOld;
+  factory FromLegacy(Metadata _metadata, LegacyTypes _legacyTypes) =
+      _FromLegacy;
 
   /* 
    TODO: find a way to generate constructor with initialization
   
-   _FromOld(this._metadata, this._legacyTypes) {
-     _registry = OldTypeRegistry(_legacyTypes);
+   FromLegacy(this._metadata, this._legacyTypes) {
+     _registry = scale_codec.OldTypeRegistry(_legacyTypes);
      _defineGenericExtrinsicEra();
      _defineGenericLookupSource();
      _defineOriginCaller();
@@ -480,8 +481,8 @@ abstract class FromOld implements _$FromOld {
     _registry.define('GenericCall', () {
       var variants = <scale_codec.Variant>[];
       _forEachPallet(
-        (AnyOldModule mod) => mod.calls,
-        (AnyOldModule mod, int index) {
+        (AnyLegacyModule mod) => mod.calls,
+        (AnyLegacyModule mod, int index) {
           variants.add(
             scale_codec.Variant(
               name: mod.name,
@@ -500,8 +501,8 @@ abstract class FromOld implements _$FromOld {
   void _defineGenericEvent() {
     _registry.define('GenericEvent', () {
       var variants = <scale_codec.Variant>[];
-      _forEachPallet((AnyOldModule mod) => mod.events?.length,
-          (AnyOldModule mod, int index) {
+      _forEachPallet((AnyLegacyModule mod) => mod.events?.length,
+          (AnyLegacyModule mod, int index) {
         variants.add(scale_codec.Variant(name: mod.name, index: index, fields: [
           scale_codec.Field(type: _makeEventEnum(mod.name, mod.events!))
         ]));
@@ -571,7 +572,7 @@ abstract class FromOld implements _$FromOld {
   @Cached()
   Map<String, Map<String, StorageItem>> _storage() {
     var storage = <String, Map<String, StorageItem>>{};
-    _forEachPallet(null, (AnyOldModule _mod, _) {
+    _forEachPallet(null, (AnyLegacyModule _mod, _) {
       dynamic mod = _mod;
       if (mod.storage == null) {
         return;
@@ -606,7 +607,7 @@ abstract class FromOld implements _$FromOld {
                 .cast<String>();
             break;
           default:
-            throw UnexpectedCaseException();
+            throw UnexpectedKindException('Unexpected Kind: ${e.type.kind}.');
         }
         items[e.name] = StorageItem(
             modifier: e.modifier.kind,
@@ -673,8 +674,8 @@ abstract class FromOld implements _$FromOld {
     });
   }
 
-  void _forEachPallet(dynamic Function(AnyOldModule mod)? filter,
-      void Function(AnyOldModule mod, int index) cb) {
+  void _forEachPallet(dynamic Function(AnyLegacyModule mod)? filter,
+      void Function(AnyLegacyModule mod, int index) cb) {
     switch (_metadata.kind) {
       case 'V9':
       case 'V10':

@@ -59,7 +59,7 @@ class Si1TypeDef {
       case 'BitSequence':
         return Si1TypeDef_BitSequence.fromJson(map['BitSequence']);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }

@@ -1,24 +1,39 @@
+part of exceptions;
+
+/// UnexpectedTypeException
 class UnexpectedTypeException implements Exception {
-  const UnexpectedTypeException([this.type]);
+  const UnexpectedTypeException(this.msg);
 
   // Unexpected type
-  final dynamic type;
+  final String msg;
 
   @override
   String toString() {
-    return 'Unexpected type${type == null ? '' : ': ${type.runtimeType}'}.';
+    return msg;
   }
 }
 
-///
-/// UnexpectedCaseException
-class UnexpectedCaseException implements Exception {
-  const UnexpectedCaseException([this.value]);
+/// UnexpectedKindException
+class UnexpectedKindException implements Exception {
+  const UnexpectedKindException(this.msg);
 
-  final dynamic value;
+  // Unexpected type
+  final String msg;
 
   @override
   String toString() {
-    return 'Unexpected case${value == null ? '' : ': $value'}.';
+    return msg;
+  }
+}
+
+/// UnexpectedCaseException
+class UnexpectedCaseException implements Exception {
+  const UnexpectedCaseException(this.msg);
+
+  final String msg;
+
+  @override
+  String toString() {
+    return msg;
   }
 }

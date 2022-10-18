@@ -23,14 +23,6 @@ Type unwrap(Type def, List<Type> types, {Set<int>? visited}) {
       }
     case TypeKind.Composite:
       if ((def as CompositeType).fields.isEmpty || def.fields[0].name == null) {
-        // TODO: Uncomment this below comment when it starts working by calling from the substrate-metadata explorer.
-        //
-        // var tuple = def.fields.map((t) {
-        //     assert(t?.name == null);
-        //     return t.type;
-        // }).toList();
-        //
-        // TODO: Check this with the above function as if the same working is being done or not.
         var tuple = def.fields.map((t) => t.type).toList();
         if (tuple.length == 1) {
           next = tuple[0];

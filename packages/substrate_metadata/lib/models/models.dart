@@ -5,7 +5,7 @@ import 'package:substrate_metadata/chainDescription.dart';
 import 'package:substrate_metadata/events_and_calls.dart';
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
-import 'package:substrate_metadata/exceptions/unexpected_exception.dart';
+import 'package:substrate_metadata/exceptions/exceptions.dart';
 import 'package:substrate_metadata/schema/spec_version.model.dart';
 
 part './metadata/metadata_base.dart';

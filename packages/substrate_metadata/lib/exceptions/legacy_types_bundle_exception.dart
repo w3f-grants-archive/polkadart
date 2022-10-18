@@ -1,13 +1,12 @@
-class LegacyTypesBundleException implements Exception {
-  const LegacyTypesBundleException([this.fileName, this.error]);
+part of exceptions;
 
-  final String? fileName;
-  final Object? error;
+class LegacyTypesBundleException implements Exception {
+  const LegacyTypesBundleException(this.msg);
+
+  final String msg;
 
   @override
   String toString() {
-    return fileName == null || error == null
-        ? 'Failed to parse LegacyTypesBundle'
-        : 'Failed to parse $fileName: $error';
+    return msg;
   }
 }

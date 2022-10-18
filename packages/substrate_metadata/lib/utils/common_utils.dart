@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:substrate_metadata/exceptions/exceptions.dart';
 
 bool isNotEmpty(dynamic value) {
   if (value == null) {
@@ -15,7 +16,7 @@ bool isNotEmpty(dynamic value) {
   } else if (value is List) {
     return value.isNotEmpty;
   }
-  throw Exception('Unknown Type Exception');
+  throw UnexpectedTypeException('Unexpected Type: $value.');
 }
 
 /// Asserts if the `T` value is null or not.
@@ -23,7 +24,7 @@ bool isNotEmpty(dynamic value) {
 /// Returns `T` if not null otherwise throws `AssertionException`
 T assertNotNull<T>(T? val, [String? msg]) {
   if (val == null) {
-    throw AssertionError(msg ?? 'Assertion Error occured.');
+    throw AssertionException(msg ?? 'Assertion Error occured.');
   }
   return val;
 }

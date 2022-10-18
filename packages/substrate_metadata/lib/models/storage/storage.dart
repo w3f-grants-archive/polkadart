@@ -24,7 +24,7 @@ class StorageEntryModifierV9 {
       case 'Requried':
         return StorageEntryModifierV9_Required();
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -55,7 +55,7 @@ class StorageEntryTypeV14 {
       case 'Map':
         return StorageEntryTypeV14_Map.fromJson(map['Map']);
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -125,7 +125,7 @@ class StorageHasherV9 {
       case 'Twox64Concat':
         return StorageHasherV9_Twox64Concat();
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -171,7 +171,7 @@ class StorageHasherV10 {
       case 'Twox64Concat':
         return StorageHasherV10_Twox64Concat();
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }
@@ -223,7 +223,7 @@ class StorageHasherV11 {
       case 'Identity':
         return StorageHasherV11_Identity();
       default:
-        throw UnexpectedTypeException();
+        throw UnexpectedTypeException('Unexpected type: $key');
     }
   }
 }

@@ -1,13 +1,13 @@
 part of models;
 
-abstract class AnyOldModule {
+abstract class AnyLegacyModule {
   final String name;
   List<FunctionMetadataV9>? calls;
   List<EventMetadataV9>? events;
   final List<ModuleConstantMetadataV9> constants;
   final List<ErrorMetadataV9> errors;
 
-  AnyOldModule(
+  AnyLegacyModule(
       {required this.name,
       this.calls,
       this.events,
@@ -15,7 +15,7 @@ abstract class AnyOldModule {
       required this.errors});
 }
 
-class ModuleMetadataV9 extends AnyOldModule {
+class ModuleMetadataV9 extends AnyLegacyModule {
   @override
   final String name;
   StorageMetadataV9? storage;
@@ -68,7 +68,7 @@ class ModuleMetadataV9 extends AnyOldModule {
   }
 }
 
-class ModuleMetadataV10 extends AnyOldModule {
+class ModuleMetadataV10 extends AnyLegacyModule {
   @override
   final String name;
   StorageMetadataV10? storage;
@@ -121,7 +121,7 @@ class ModuleMetadataV10 extends AnyOldModule {
   }
 }
 
-class ModuleMetadataV11 extends AnyOldModule {
+class ModuleMetadataV11 extends AnyLegacyModule {
   @override
   final String name;
   StorageMetadataV11? storage;
@@ -174,7 +174,7 @@ class ModuleMetadataV11 extends AnyOldModule {
   }
 }
 
-class ModuleMetadataV12 extends AnyOldModule {
+class ModuleMetadataV12 extends AnyLegacyModule {
   @override
   final String name;
   final int index;
@@ -230,7 +230,7 @@ class ModuleMetadataV12 extends AnyOldModule {
   }
 }
 
-class ModuleMetadataV13 extends AnyOldModule {
+class ModuleMetadataV13 extends AnyLegacyModule {
   @override
   final String name;
   final int index;

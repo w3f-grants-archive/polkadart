@@ -38,7 +38,7 @@ dynamic decodeExtrinsic(dynamic rawExtrinsic, ChainDescription chainDescription,
   }
 }
 
-Uint8List encodeExtrinsic(Map<String, dynamic> extrinsic,
+List<int> encodeExtrinsic(Map<String, dynamic> extrinsic,
     ChainDescription chainDescription, scale_codec.Codec? codec) {
   assertionCheck(extrinsic['version'] == 4, 'unsupported extrinsic version');
   codec = codec ?? scale_codec.Codec(chainDescription.types);

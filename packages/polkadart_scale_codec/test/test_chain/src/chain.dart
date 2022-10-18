@@ -219,7 +219,7 @@ abstract class Chain implements _$Chain {
   List<VersionDescription> getDescription() {
     return versions().map((SpecVersion sv) {
       var metadata = decodeMetadata(sv.metadata);
-      var typesBundle = getOldTypesBundle(sv.specName);
+      var typesBundle = getLegacyTypesBundle(sv.specName);
       var types = typesBundle != null
           ? getTypesFromBundle(typesBundle, sv.specVersion)
           : null;
