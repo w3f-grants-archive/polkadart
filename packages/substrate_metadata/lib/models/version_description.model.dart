@@ -7,15 +7,10 @@ class VersionDescription extends SpecVersion {
   final Registry calls;
 
   VersionDescription(
-      {
-
-      /// local params
-      required this.description,
+      {required this.description,
       required this.codec,
       required this.events,
       required this.calls,
-
-      /// Super params
       required super.metadata,
       required super.specName,
       required super.specVersion,
