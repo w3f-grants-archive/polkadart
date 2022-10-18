@@ -50,7 +50,7 @@ model.Metadata _decode(int version, scale.Source source) {
 }
 
 Map<String, dynamic> _createScaleCodec() {
-  var registry = scale.OldTypeRegistry(types: metadata_definitions.types.types);
+  var registry = scale.TypeRegistry(types: metadata_definitions.types.types);
   var versions = List<int>.filled(6, 0);
   for (var i = 9; i < 15; i++) {
     versions[i - 9] = registry.getIndex('MetadataV$i');

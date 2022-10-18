@@ -317,7 +317,7 @@ abstract class FromV14 implements _$FromV14 {
                 case 'Array':
                   return scale_codec.ArrayType(
                     type: (def as Si1TypeDef_Array).value.type,
-                    len: def.value.len,
+                    length: def.value.len,
                     path: info['path'],
                     docs: info['docs'],
                   );
@@ -344,13 +344,13 @@ abstract class FromV14 implements _$FromV14 {
               }
             }).toList() ??
             <scale_codec.Type>[];
-    return scale_codec.OldTypeRegistry().normalizeMetadataTypes(typesValue);
+    return scale_codec.TypeRegistry().normalizeMetadataTypes(typesValue);
   }
 }
 
 @WithCache()
 abstract class FromLegacy implements _$FromLegacy {
-  late scale_codec.OldTypeRegistry _registry;
+  late scale_codec.TypeRegistry _registry;
   factory FromLegacy(Metadata _metadata, LegacyTypes _legacyTypes) =
       _FromLegacy;
 

@@ -139,7 +139,7 @@ abstract class Chain implements _$Chain {
             var def = des.description.constants[pallet]![name];
             var value = des.codec.decode(def!.type, def.value);
             final bytesSink = ByteDecoder();
-            des.codec.encodeWithSink(def.type, value, bytesSink);
+            des.codec.encodeWithEncoder(def.type, value, bytesSink);
             final encoded = bytesSink.toBytes();
             expect(encoded, def.value);
           }

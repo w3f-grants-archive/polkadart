@@ -22,7 +22,7 @@ dependencies:
   polkadart_scale_codec:
     git:
       url: https://github.com/rankanizer/polkadart.git
-      ref: fix/add-fixes-for-substrate-metadata
+      ref: fix/fixes-scale-codec
       path: packages/polkadart_scale_codec
   
   utility: ^1.0.3 # MIT

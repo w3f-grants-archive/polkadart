@@ -11,7 +11,7 @@ final scale_codec.Codec codec = _map['codec']!;
 final int _type = _map['type']!;
 
 Map<String, dynamic> _createCodec() {
-  var registry = scale_codec.OldTypeRegistry(types: xcm_types.types);
+  var registry = scale_codec.TypeRegistry(types: xcm_types.types);
   var type = registry.getIndex('VersionedXcm');
   var types = registry.getTypes();
   var codec = scale_codec.Codec(types);

@@ -8,13 +8,13 @@ void main() {
     ast(
       '[A; 10]',
       scale.RegistryArrayType(
-          item: scale.RegistryNamedType(name: 'A', params: []), len: 10),
+          item: scale.RegistryNamedType(name: 'A', params: []), length: 10),
     );
 
     ast(
         '[u8; 16; H128]',
         scale.RegistryArrayType(
-            item: scale.RegistryNamedType(name: 'u8', params: []), len: 16));
+            item: scale.RegistryNamedType(name: 'u8', params: []), length: 16));
 
     ast(
         '(A, B, [u8; 5])',
@@ -22,7 +22,7 @@ void main() {
           scale.RegistryNamedType(name: 'A', params: []),
           scale.RegistryNamedType(name: 'B', params: []),
           scale.RegistryArrayType(
-              item: scale.RegistryNamedType(name: 'u8', params: []), len: 5)
+              item: scale.RegistryNamedType(name: 'u8', params: []), length: 5)
         ]));
 
     testFunction('A');

@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-
 import '/old/definitions/acala.dart' as acala;
 import '/old/definitions/altair.dart' as altair;
 import '/old/definitions/astar.dart' as astar;
@@ -26,7 +23,6 @@ import '/old/definitions/shiden.dart' as shiden;
 import '/old/definitions/statemint.dart' as statemint;
 import '/old/definitions/subsocial.dart' as subsocial;
 import '/old/definitions/unique.dart' as unique;
-import 'exceptions/exceptions.dart';
 import 'old/legacy_types.dart';
 
 LegacyTypesBundle? getLegacyTypesBundle(String chain) {

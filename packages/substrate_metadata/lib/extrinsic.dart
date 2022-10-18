@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
 import 'package:substrate_metadata/utils/byte_decoder.dart';
@@ -12,7 +10,7 @@ dynamic decodeExtrinsic(dynamic rawExtrinsic, ChainDescription chainDescription,
   codec = codec ?? scale_codec.Codec(chainDescription.types);
 
   var source = scale_codec.Source(rawExtrinsic);
-  source.uncompact();
+  source.decodeCompact();
 
   var meta = source.u8();
 
@@ -53,10 +51,10 @@ List<int> encodeExtrinsic(Map<String, dynamic> extrinsic,
 
   sink.u8(meta);
   if (extrinsic['signature'] != null) {
-    codec.encodeWithSink(
+    codec.encodeWithEncoder(
         chainDescription.signature, extrinsic['signature'], sink);
   }
-  codec.encodeWithSink(chainDescription.call, extrinsic['call'], sink);
+  codec.encodeWithEncoder(chainDescription.call, extrinsic['call'], sink);
 
   var bytes = sink.toBytes();
   sink = ByteDecoder();

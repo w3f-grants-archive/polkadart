@@ -170,7 +170,7 @@ class TypeHasher {
       case scale.TypeKind.Array:
         return <String, dynamic>{
           'array': {
-            'len': (type as scale.ArrayType).len,
+            'len': (type as scale.ArrayType).length,
             'type': _hash(type.type, parent)
           }
         };

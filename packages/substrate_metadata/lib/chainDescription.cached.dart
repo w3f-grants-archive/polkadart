@@ -313,7 +313,7 @@ abstract class _$FromLegacy {
 
 class _FromLegacy with FromLegacy implements _$FromLegacy {
   _FromLegacy(this._metadata, this._legacyTypes) {
-    _registry = scale_codec.OldTypeRegistry(
+    _registry = scale_codec.TypeRegistry(
         types: _legacyTypes.types, typesAlias: _legacyTypes.typesAlias);
     _defineGenericExtrinsicEra();
     _defineGenericLookupSource();

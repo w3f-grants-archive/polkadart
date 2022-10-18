@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart';
 
-class ByteDecoder extends ScaleCodecSink {
+class ByteDecoder extends ScaleCodecEncoder {
   Uint8List _data = Uint8List(128);
   int _pos = 0;
 
