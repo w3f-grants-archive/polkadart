@@ -22,7 +22,7 @@ dependencies:
   polkadart_scale_codec:
     git:
       url: https://github.com/rankanizer/polkadart.git
-      ref: fix/fixes-scale-codec
+      ref: justkawal/struct-test-and-example
       path: packages/polkadart_scale_codec
   
   utility: ^1.0.3 # MIT

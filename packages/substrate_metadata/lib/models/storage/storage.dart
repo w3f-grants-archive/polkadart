@@ -14,8 +14,7 @@ class StorageEntryModifierV9 {
   const StorageEntryModifierV9({required this.kind});
 
   /// Creates Class Object from `Json`
-  static StorageEntryModifierV9 fromJson(Map<String, dynamic> map) {
-    final key = map.keys.first;
+  static StorageEntryModifierV9 fromKey(String key) {
     switch (key) {
       case 'Optional':
         return StorageEntryModifierV9_Optional();
@@ -81,7 +80,7 @@ class StorageEntryTypeV14_Map extends StorageEntryTypeV14 {
       StorageEntryTypeV14_Map(
         key: map['key'],
         hashers: (map['hashers'] as List)
-            .map((value) => StorageHasherV11.fromJson(value))
+            .map((value) => StorageHasherV11.fromKey(value))
             .toList(),
         value: map['value'],
       );
@@ -155,8 +154,7 @@ class StorageHasherV10 {
   const StorageHasherV10({required this.kind});
 
   /// Creates Class Object from `Json`
-  static StorageHasherV10 fromJson(Map<String, dynamic> map) {
-    final key = map.keys.first;
+  static StorageHasherV10 fromKey(String key) {
     switch (key) {
       case 'Blake2_128':
         return StorageHasherV10_Blake2_128();
@@ -205,8 +203,7 @@ class StorageHasherV11 {
   const StorageHasherV11({required this.kind});
 
   /// Creates Class Object from `Json`
-  static StorageHasherV11 fromJson(Map<String, dynamic> map) {
-    final key = map.keys.first;
+  static StorageHasherV11 fromKey(String key) {
     switch (key) {
       case 'Blake2_128':
         return StorageHasherV11_Blake2_128();

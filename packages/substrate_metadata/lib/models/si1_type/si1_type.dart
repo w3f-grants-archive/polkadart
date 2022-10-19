@@ -53,7 +53,7 @@ class Si1TypeDef {
       case 'Tuple':
         return Si1TypeDef_Tuple.fromJson(map['Tuple']);
       case 'Primitive':
-        return Si1TypeDef_Primitive.fromJson(map['Primitive']);
+        return Si1TypeDef_Primitive.fromKey(map['Primitive']);
       case 'Compact':
         return Si1TypeDef_Compact.fromJson(map['Compact']);
       case 'BitSequence':
@@ -114,8 +114,8 @@ class Si1TypeDef_Primitive extends Si1TypeDef {
   const Si1TypeDef_Primitive({required this.value}) : super(kind: 'Primitive');
 
   /// Creates Class Object from `Json`
-  static Si1TypeDef_Primitive fromJson(Map<String, dynamic> map) =>
-      Si1TypeDef_Primitive(value: Si0TypeDefPrimitive.fromJson(map));
+  static Si1TypeDef_Primitive fromKey(String key) =>
+      Si1TypeDef_Primitive(value: Si0TypeDefPrimitive.fromKey(key));
 }
 
 class Si1TypeDef_Compact extends Si1TypeDef {
