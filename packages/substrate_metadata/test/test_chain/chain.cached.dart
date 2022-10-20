@@ -19,13 +19,13 @@ class _Chain with Chain implements _$Chain {
   final String chainName;
 
   final _versionsCached = <String, List<SpecVersion>>{};
-  final _blockNumbersCached = <String, List<int>>{};
   final _getBlocksCached = <String, List<RawBlock>>{};
   final _eventsCached = <String, List<RawBlockEvents>>{};
   final _decodedExtrinsicsCached = <String, List<DecodedBlockExtrinsics>>{};
   final _decodedEventsCached = <String, List<DecodedBlockEvents>>{};
   final _getVersionCached = <String, VersionDescription>{};
-  final _getDescriptionCached = <String, List<VersionDescription>>{};
+  final _getVersionDescriptionListCached = <String, List<VersionDescription>>{};
+  final _getVersionDescriptionCached = <String, VersionDescription>{};
 
   @override
   List<SpecVersion> versions() {
@@ -41,27 +41,6 @@ class _Chain with Chain implements _$Chain {
       } finally {}
 
       _versionsCached[""] = toReturn;
-
-      return toReturn;
-    } else {
-      return cachedValue;
-    }
-  }
-
-  @override
-  List<int> blockNumbers() {
-    final cachedValue = _blockNumbersCached[""];
-    if (cachedValue == null) {
-      final List<int> toReturn;
-      try {
-        final result = super.blockNumbers();
-
-        toReturn = result;
-      } catch (_) {
-        rethrow;
-      } finally {}
-
-      _blockNumbersCached[""] = toReturn;
 
       return toReturn;
     } else {
@@ -175,19 +154,40 @@ class _Chain with Chain implements _$Chain {
   }
 
   @override
-  List<VersionDescription> getDescription() {
-    final cachedValue = _getDescriptionCached[""];
+  List<VersionDescription> getVersionDescriptionList() {
+    final cachedValue = _getVersionDescriptionListCached[""];
     if (cachedValue == null) {
       final List<VersionDescription> toReturn;
       try {
-        final result = super.getDescription();
+        final result = super.getVersionDescriptionList();
 
         toReturn = result;
       } catch (_) {
         rethrow;
       } finally {}
 
-      _getDescriptionCached[""] = toReturn;
+      _getVersionDescriptionListCached[""] = toReturn;
+
+      return toReturn;
+    } else {
+      return cachedValue;
+    }
+  }
+
+  @override
+  VersionDescription getVersionDescription(SpecVersion sv) {
+    final cachedValue = _getVersionDescriptionCached["${sv.hashCode}"];
+    if (cachedValue == null) {
+      final VersionDescription toReturn;
+      try {
+        final result = super.getVersionDescription(sv);
+
+        toReturn = result;
+      } catch (_) {
+        rethrow;
+      } finally {}
+
+      _getVersionDescriptionCached["${sv.hashCode}"] = toReturn;
 
       return toReturn;
     } else {

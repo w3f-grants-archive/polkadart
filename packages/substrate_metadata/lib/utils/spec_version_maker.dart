@@ -26,11 +26,11 @@ List<SpecVersion> readSpecVersions(String filePath) {
   if (filePath.endsWith('.json')) {
     return readJson(filePath);
   } else {
-    return readJsonLines(filePath);
+    return readSpecVersionJsonLines(filePath);
   }
 }
 
-List<SpecVersion> readJsonLines(String filePath) {
+List<SpecVersion> readSpecVersionJsonLines(String filePath) {
   var result = <SpecVersion>[];
   File file = File(filePath);
   for (var line in file.readAsLinesSync()) {

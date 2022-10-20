@@ -7,7 +7,6 @@ import 'package:cached_annotation/cached_annotation.dart';
 import 'package:path/path.dart' as path;
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart'
     as scale_codec;
-import 'package:substrate_metadata/utils/byte_decoder.dart';
 import 'package:substrate_metadata/chainDescription.dart';
 import 'package:substrate_metadata/codec.dart';
 import 'package:substrate_metadata/events_and_calls.dart';
@@ -16,6 +15,7 @@ import 'package:substrate_metadata/io.dart';
 import 'package:substrate_metadata/models/models.dart';
 import 'package:substrate_metadata/old/types_bundle.dart';
 import 'package:substrate_metadata/schema/spec_version.model.dart';
+import 'package:substrate_metadata/utils/byte_decoder.dart';
 import 'package:substrate_metadata/utils/common_utils.dart';
 import 'package:substrate_metadata/utils/spec_version_maker.dart';
 import 'package:test/test.dart';
@@ -33,16 +33,6 @@ abstract class Chain implements _$Chain {
   @Cached()
   List<SpecVersion> versions() {
     return readSpecVersions(_item('versions.jsonl'));
-  }
-
-  @Cached()
-  List<int> blockNumbers() {
-    return _read<List<int>>('block-numbers.json');
-  }
-
-  T _read<T>(String name) {
-    var content = _readFile(name);
-    return jsonDecode(content) as T;
   }
 
   @Cached()
@@ -74,11 +64,12 @@ abstract class Chain implements _$Chain {
   }
 
   void testExtrinsicsScaleEncodingDecoding() {
-    var decoded = decodedExtrinsics();
+    List<DecodedBlockExtrinsics> decoded = decodedExtrinsics();
 
-    var encoded = flatten(decoded.map((b) {
-      var d = getVersion(b.blockNumber);
-      var extrinsics = b.extrinsics.map((ex) {
+    List<Map<String, dynamic>> encoded =
+        flatten(decoded.map((DecodedBlockExtrinsics b) {
+      VersionDescription d = getVersion(b.blockNumber);
+      List<String> extrinsics = b.extrinsics.map((ex) {
         return scale_codec
             .encodeHex(encodeExtrinsic(ex, d.description, d.codec));
       }).toList();
@@ -130,7 +121,7 @@ abstract class Chain implements _$Chain {
       case 'kintsugi':
         return;
     }
-    for (final des in getDescription()) {
+    for (final des in getVersionDescriptionList()) {
       for (final pallet in des.description.constants.keys) {
         test(
             ' Constants Encode/Decode  Spec-Version: ${des.specVersion}  Pallet: $pallet',
@@ -196,7 +187,7 @@ abstract class Chain implements _$Chain {
 
   @Cached()
   VersionDescription getVersion(int blockNumber) {
-    var description = getDescription();
+    var description = getVersionDescriptionList();
     int next = -1;
     for (var index = 0; index < description.length; index++) {
       if (description[index].blockNumber >= blockNumber) {
@@ -211,35 +202,39 @@ abstract class Chain implements _$Chain {
           ? description[description.length - 1]
           : description[next - 1];
     }
-    assertNotNull(e, 'not found metadata for block $blockNumber');
+    assertNotNull(e, 'Not found metadata for block $blockNumber');
     return e!;
   }
 
   @Cached()
-  List<VersionDescription> getDescription() {
-    return versions().map((SpecVersion sv) {
-      var metadata = decodeMetadata(sv.metadata);
-      var typesBundle = getLegacyTypesBundle(sv.specName);
-      var types = typesBundle != null
-          ? getTypesFromBundle(typesBundle, sv.specVersion)
-          : null;
-      var description = getChainDescriptionFromMetadata(metadata, types);
+  List<VersionDescription> getVersionDescriptionList() {
+    return versions().map(getVersionDescription).toList();
+  }
 
-      return VersionDescription(
-        /// local to class params
-        description: description,
-        codec: scale_codec.Codec(description.types),
-        events: Registry(description.types, description.event),
-        calls: Registry(description.types, description.call),
+  @Cached()
+  VersionDescription getVersionDescription(SpecVersion sv) {
+    final decoder = MetadataDecoder.instance;
+    var metadata = decoder.decode(sv.metadata);
+    var typesBundle = getLegacyTypesBundle(sv.specName);
+    var types = typesBundle != null
+        ? getTypesFromBundle(typesBundle, sv.specVersion)
+        : null;
+    var description = getChainDescriptionFromMetadata(metadata, types);
 
-        /// passing params for super-class i.e. SpecVersion
-        metadata: sv.metadata,
-        specName: sv.specName,
-        specVersion: sv.specVersion,
-        blockNumber: sv.blockNumber,
-        blockHash: sv.blockHash,
-      );
-    }).toList();
+    return VersionDescription(
+      /// local to class params
+      description: description,
+      codec: scale_codec.Codec(description.types),
+      events: Registry(description.types, description.event),
+      calls: Registry(description.types, description.call),
+
+      /// passing params for super-class i.e. SpecVersion
+      metadata: sv.metadata,
+      specName: sv.specName,
+      specVersion: sv.specVersion,
+      blockNumber: sv.blockNumber,
+      blockHash: sv.blockHash,
+    );
   }
 
   void _save(String filePath, dynamic content) {
