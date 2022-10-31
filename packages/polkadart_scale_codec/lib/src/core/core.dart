@@ -4,6 +4,8 @@ library polkadart_scale_codec_core;
 import 'dart:math';
 import 'dart:mirrors';
 import 'dart:typed_data';
+import 'dart:core' as core;
+import 'dart:core';
 import 'package:utility/utility.dart';
 import 'package:equatable/equatable.dart';
 import 'package:polkadart_scale_codec/polkadart_scale_codec.dart';
@@ -20,6 +22,7 @@ part 'types_codec.dart';
 part 'types.dart';
 part 'type_exp.dart';
 part 'registry.dart';
+part 'option_type.dart';
 
 // `Scale Codec` types
 part '../types/codec_u8.dart';
